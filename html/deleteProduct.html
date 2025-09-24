@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eliminar Producto - eCommerce</title>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/normalize.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin:0; padding:0;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:#f5f7fa;
+      min-height:100vh;
+      display:flex; flex-direction:column;
+    }
+    main {
+      flex:1;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding:40px 20px;
+    }
+    .container {
+      background:white;
+      padding:40px 50px;
+      border-radius:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.1);
+      max-width:520px; width:100%;
+      transition: box-shadow 0.3s ease;
+    }
+    .container:hover { box-shadow:0 15px 40px rgba(0,0,0,0.15); }
+    h1 {
+      margin:0 0 30px 0;
+      font-weight:700;
+      color:#222;
+      text-align:center;
+      font-size:2rem;
+    }
+    label { font-weight:600; color:#444; font-size:1rem; margin-bottom:6px; display:block; }
+    input[type="number"] {
+      padding:12px 15px;
+      font-size:1rem;
+      border:1.5px solid #ddd;
+      border-radius:8px;
+      width:100%;
+      margin-bottom:15px;
+    }
+    .actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
+      margin-top:10px;
+    }
+    .btn-buscar {
+      padding:12px;
+      background:linear-gradient(90deg,#6366f1,#4f46e5);
+      border:none; border-radius:10px;
+      color:white; font-weight:700; font-size:1rem;
+      cursor:pointer; flex:1;
+    }
+    .btn-buscar:hover { background:linear-gradient(90deg,#4f46e5,#4338ca); }
+    .btn-eliminar {
+      padding:12px;
+      background:linear-gradient(90deg,#ef4444,#dc2626);
+      border:none; border-radius:10px;
+      color:white; font-weight:700; font-size:1rem;
+      cursor:pointer; flex:1;
+    }
+    .btn-eliminar:hover { background:linear-gradient(90deg,#dc2626,#b91c1c); }
+    .btn-volver {
+      background:#e5e7eb;
+      color:#374151;
+      padding:12px 14px;
+      border-radius:10px;
+      font-weight:700;
+      font-size:1rem;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition: background .2s ease, transform .15s ease;
+      flex:1;
+      justify-content:center;
+    }
+    .btn-volver:hover {
+      background:#d1d5db;
+      transform: translateY(-1px);
+    }
+    #message { margin-top:20px; font-weight:600; font-size:1rem; text-align:center; }
+    .success-message { color:#16a34a; }
+    .error-message { color:#dc2626; }
+    .product-info {
+      background:#f9f9f9;
+      padding:15px;
+      border-radius:8px;
+      margin-top:10px;
+    }
+  </style>
+</head>
+<body>
+
+
+
+  <!-- MAIN -->
+  <main>
+    <div class="container" role="main" aria-label="Eliminar producto">
+      <h1>Eliminar Producto</h1>
+      
+      <label for="productId">ID del Producto</label>
+      <input type="number" id="productId" placeholder="Ingrese ID" min="1" />
+
+      <div class="actions">
+        <button id="btnBuscar" class="btn-buscar" type="button">
+          <i class="fa-solid fa-magnifying-glass"></i> Buscar
+        </button>
+        <button id="btnEliminar" class="btn-eliminar" type="button" disabled>
+          <i class="fa-solid fa-trash"></i> Eliminar
+        </button>
+        <a href="admin.html" class="btn-volver">
+          <i class="fa-solid fa-arrow-left"></i> Volver al panel
+        </a>
+      </div>
+
+      <div id="productInfo" class="product-info" style="display:none;"></div>
+      <div id="message" role="alert" aria-live="polite"></div>
+    </div>
+  </main>
+
+  <script>
+    const API_URL = 'http://localhost:8080';
+    const productIdInput = document.getElementById('productId');
+    const btnBuscar = document.getElementById('btnBuscar');
+    const btnEliminar = document.getElementById('btnEliminar');
+    const productInfo = document.getElementById('productInfo');
+    const messageDiv = document.getElementById('message');
+
+    function showMessage(msg,type){
+      messageDiv.textContent = msg;
+      messageDiv.className = type==='error'?'error-message':'success-message';
+    }
+
+    btnBuscar.addEventListener('click', async ()=>{
+      const id = productIdInput.value.trim();
+      productInfo.style.display='none';
+      btnEliminar.disabled = true;
+      if(!id) { showMessage('Ingrese un ID válido','error'); return; }
+
+      try{
+        const res = await fetch(`${API_URL}/products/get/${id}`);
+        if(!res.ok) throw new Error('Producto no encontrado');
+        const prod = await res.json();
+        productInfo.style.display='block';
+        productInfo.innerHTML = `
+          <strong>Nombre:</strong> ${prod.name}<br>
+          <strong>Precio:</strong> ${prod.price || '-'}<br>
+          <strong>Color:</strong> ${prod.color || '-'}<br>
+          <strong>Material:</strong> ${prod.material || '-'}<br>
+          <strong>Talle:</strong> ${prod.waist || '-'}<br>
+          <strong>Categoría:</strong> ${prod.categoryDesc || '-'}
+        `;
+        btnEliminar.disabled = false;
+        showMessage('Producto encontrado, puede eliminarlo.','success');
+      }catch(err){
+        showMessage(err.message,'error');
+      }
+    });
+
+    btnEliminar.addEventListener('click', async ()=>{
+      const id = productIdInput.value.trim();
+      if(!id) { showMessage('ID inválido','error'); return; }
+      try{
+        const res = await fetch(`${API_URL}/products/delete/${id}`,{ method:'DELETE' });
+        if(!res.ok) throw new Error(await res.text());
+        showMessage('Producto eliminado correctamente!','success');
+        productInfo.style.display='none';
+        btnEliminar.disabled = true;
+        productIdInput.value='';
+      }catch(err){
+        showMessage('Error: '+err.message,'error');
+      }
+    });
+  </script>
+
+</body>
+</html>

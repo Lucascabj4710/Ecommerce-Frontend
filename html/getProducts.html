@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Productos</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- Header / estilos globales -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/normalize.css"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+
+  <style>
+    :root{
+      --bg-light:#fef0f8; --bg-gradient-end:#fff5fa; --card-bg:#ffffff;
+      --text-dark:#3a1c2a; --text-muted:#8c607a;
+      --brand-primary:#e84a96; --brand-secondary:#f062a4; --brand-dark:#d63a81;
+      --border-light:#fcdde9; --focus-ring:rgba(232,74,150,.3);
+      --shadow-light:rgba(232,74,150,.08); --shadow-medium:rgba(232,74,150,.15);
+      --radius-default:14px; --radius-large:20px; --transition-ease:.25s ease-out;
+    }
+    *{box-sizing:border-box}
+
+    body{
+      margin:0; padding:25px;
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text-dark);
+      background-image: linear-gradient(170deg, var(--bg-light) 0%, var(--bg-gradient-end) 100%);
+      min-height:100vh;
+    }
+
+    .wrapper{
+      max-width: 1200px; width: 100%;
+      margin: 0 auto; position: relative;
+    }
+
+    /* Cabecera interna de la página: back + título */
+    .page-head{
+      display:flex; align-items:center; gap:12px; margin: 8px 0 18px;
+      flex-wrap: wrap;
+    }
+    .page-head h1{
+      margin:0; flex:1 1 auto;
+      font-size:clamp(1.6rem,3.2vw,2.2rem);
+      background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      font-weight:800;
+      text-shadow: 0 2px 20px rgba(255,255,255,.8);
+    }
+
+    .back-btn{
+      flex:0 0 auto; display:inline-flex; align-items:center; gap:8px;
+      padding:10px 14px; border-radius:999px; text-decoration:none; font-weight:700;
+      background:#fff; color:var(--brand-primary);
+      border:1px solid var(--border-light);
+      box-shadow:0 4px 15px var(--shadow-light);
+      transition:transform var(--transition-ease), box-shadow var(--transition-ease), background var(--transition-ease), color var(--transition-ease);
+    }
+    .back-btn:hover{
+      transform:translateY(-2px);
+      background:var(--brand-primary); color:#fff;
+      box-shadow:0 8px 24px var(--shadow-medium);
+    }
+    .back-btn i{ font-size:0.95rem; }
+
+    /* Toolbar de filtros */
+    .toolbar{
+      display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;
+      background:#fff; border:1px solid var(--border-light);
+      padding:10px; border-radius:16px; box-shadow:0 4px 15px var(--shadow-light);
+      margin-bottom:18px;
+    }
+    .filters{
+      display:flex; flex-wrap:wrap; gap:12px; align-items:center;
+    }
+    .toolbar input, .toolbar select{
+      border:1.5px solid var(--border-light); border-radius:10px; padding:10px 14px;
+      outline:none; font-size:.95rem; min-width:180px;
+      background-color: var(--card-bg); color: var(--text-dark);
+      transition: var(--transition-ease);
+      box-shadow: 0 2px 8px var(--shadow-light);
+    }
+    .toolbar input:focus, .toolbar select:focus{
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 4px var(--focus-ring);
+    }
+    .meta-chip{
+      background:#fff; border:1px solid var(--border-light);
+      border-radius:999px; padding:8px 12px; color:var(--text-muted);
+      box-shadow:0 1px 2px var(--shadow-light);
+      font-size:.95rem;
+    }
+
+    /* Grid de cards */
+    .grid{
+      display:grid; gap:25px;
+      grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+      margin-top:10px;
+    }
+    .card{
+      background:var(--card-bg); border-radius:var(--radius-large);
+      overflow:hidden;
+      box-shadow:0 4px 15px var(--shadow-light); border:1px solid var(--border-light);
+      display:flex; flex-direction:column;
+      transition:transform var(--transition-ease), box-shadow var(--transition-ease);
+    }
+    .card:hover{ transform: translateY(-8px); box-shadow: 0 12px 35px var(--shadow-medium); }
+    .card .media{ overflow:hidden; }
+    .card img{
+      width:100%; height:180px; object-fit:cover; display:block;
+      transition: transform 0.3s ease-out;
+    }
+    .card:hover img{ transform: scale(1.05); }
+    .card-body{ padding:16px 18px; text-align:left; flex-grow:1;}
+    .card-title{font-weight:700; font-size:1.05rem; margin:0 0 6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .card-sub{font-size:.9rem; color:var(--text-muted); margin:0 0 8px;}
+    .card-price{color:var(--brand-primary); font-weight:800; font-size:1.2rem;}
+    .card-actions{padding:0 18px 18px;}
+    .card-actions a{
+      display:block; text-align:center; text-decoration:none; color:#fff;
+      background:linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+      padding:12px; border-radius:999px; font-weight:700;
+      transition: transform var(--transition-ease), box-shadow var(--transition-ease), filter .15s ease;
+    }
+    .card-actions a:hover{
+      background:linear-gradient(90deg, var(--brand-secondary), var(--brand-dark));
+      transform: scale(1.02); box-shadow: 0 5px 15px var(--shadow-medium);
+    }
+
+    /* Paginación */
+    .pagination{display:flex; justify-content:center; gap:12px; margin-top:26px;}
+    .pgbtn{
+      padding:10px 18px; border-radius:999px;
+      border:1.5px solid var(--border-light);
+      background:var(--card-bg); cursor:pointer; font-weight: 600;
+      transition: var(--transition-ease);
+    }
+    .pgbtn:hover:not(:disabled){
+      background: var(--brand-primary); color: #fff; border-color: var(--brand-primary);
+      transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow-medium);
+    }
+    .pgbtn:disabled{opacity:0.6; cursor:not-allowed;}
+
+    .state { grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+
+  <div class="wrapper">
+    <div class="page-head">
+      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Volver a Inicio</a>
+      <h1>✨ Nuestros Productos ✨</h1>
+    </div>
+
+    <div class="toolbar">
+      <div class="filters">
+        <input type="text" id="q" placeholder="Buscar producto...">
+        <select id="materialFilter">
+          <option value="">Todos los materiales</option>
+        </select>
+        <select id="sort">
+          <option value="price,asc">Precio ↑</option>
+          <option value="price,desc">Precio ↓</option>
+          <option value="name,asc">Nombre A-Z</option>
+          <option value="name,desc">Nombre Z-A</option>
+        </select>
+      </div>
+      <div id="meta" class="meta-chip">—</div>
+    </div>
+
+    <div id="products" class="grid"></div>
+
+    <div class="pagination">
+      <button id="prev" class="pgbtn">Anterior</button>
+      <button id="next" class="pgbtn">Siguiente</button>
+    </div>
+  </div>
+
+  <script>
+  const API_BASE = 'http://localhost:8080/products';
+  const productsContainer = document.getElementById('products');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const qInput = document.getElementById('q');
+  const sortSelect = document.getElementById('sort');
+  const materialFilter = document.getElementById('materialFilter');
+  const meta = document.getElementById('meta');
+
+  let currentPage = 0;
+  let pageSize = 10;
+  let totalPages = 1;
+
+  function productCard(p){
+    const img = p.imageUrl ? API_BASE.replace('/products','') + p.imageUrl : 'https://via.placeholder.com/600x450?text=Sin+imagen';
+    const div = document.createElement('div'); div.className='card';
+    const material = p.material ? `<p class="card-sub">${p.material}</p>` : '';
+    div.innerHTML = `
+      <div class="media">
+        <img src="${img}" alt="${p.name}">
+      </div>
+      <div class="card-body">
+        <div class="card-title" title="${p.name}">${p.name}</div>
+        ${material}
+        <div class="card-price">$${p.price ? p.price.toLocaleString('es-AR') : '0'}</div>
+      </div>
+      <div class="card-actions">
+        <a href="getProductId.html?id=${p.id}">Ver producto</a>
+      </div>`;
+    div.querySelector('img').addEventListener('error', (e) => {
+      e.target.src = 'https://via.placeholder.com/600x450?text=Imagen+no+disponible';
+    });
+    return div;
+  }
+
+  function setMeta(data){
+    const count = data.numberOfElements ?? (data.content?.length || 0);
+    const page = (data.number ?? currentPage) + 1;
+    const totalP = data.totalPages ?? totalPages ?? 1;
+    meta.textContent = `${count} resultado(s) • Página ${page} de ${totalP}`;
+  }
+
+  async function loadProducts(){
+    const name = qInput.value.trim();
+    const material = materialFilter.value;
+    const [sortBy, direction] = sortSelect.value.split(',');
+
+    const params = new URLSearchParams({
+      page: currentPage,
+      size: pageSize,
+      sortBy: sortBy,
+      direction: direction
+    });
+    if (name) params.append('name', name);
+    if (material) params.append('material', material);
+
+    const url = `${API_BASE}/getProducts?${params.toString()}`;
+
+    productsContainer.innerHTML = '<p class="state">Cargando productos...</p>';
+    meta.textContent = '—';
+
+    try{
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Error de red: ${res.status}`);
+      const data = await res.json();
+
+      productsContainer.innerHTML = '';
+      if(!data.content || data.content.length === 0){
+        productsContainer.innerHTML='<p class="state">No se encontraron productos.</p>';
+        totalPages = data.totalPages ?? 1;
+        setMeta({content:[], number: currentPage, totalPages});
+        prevBtn.disabled = true; nextBtn.disabled = true;
+        return;
+      }
+
+      data.content.forEach(p=>productsContainer.appendChild(productCard(p)));
+
+      totalPages = data.totalPages ?? 1;
+      prevBtn.disabled = data.first ?? (currentPage===0);
+      nextBtn.disabled = data.last ?? (currentPage>=totalPages-1);
+
+      setMeta(data);
+    }catch(e){
+      console.error("Error al cargar productos:", e);
+      productsContainer.innerHTML='<p class="state">Error al cargar productos.</p>';
+      meta.textContent = '—';
+    }
+  }
+
+  async function loadMaterials(){
+    try{
+      const res = await fetch(`${API_BASE}/getMaterial`);
+      if (!res.ok) throw new Error(`Error al obtener materiales: ${res.status}`);
+      const materials = await res.json();
+
+      materialFilter.innerHTML = '<option value="">Todos los materiales</option>';
+      (materials||[]).forEach(m=>{
+        if(m && typeof m === 'string' && m.trim() !== ''){
+          materialFilter.innerHTML += `<option value="${m}">${m}</option>`;
+        }
+      });
+
+      const materialParam = new URLSearchParams(location.search).get('material');
+      if(materialParam){ materialFilter.value = materialParam; }
+    }catch(e){
+      console.error("Error al cargar materiales:", e);
+      materialFilter.disabled = true;
+    }
+  }
+
+  const debounce = (func, delay) => {
+    let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func.apply(this, args), delay); };
+  };
+  const debouncedLoadProducts = debounce(() => { currentPage = 0; loadProducts(); }, 300);
+
+  qInput.addEventListener('input', debouncedLoadProducts);
+  sortSelect.addEventListener('change', debouncedLoadProducts);
+  materialFilter.addEventListener('change', debouncedLoadProducts);
+
+  prevBtn.addEventListener('click', ()=>{ if(currentPage > 0){ currentPage--; loadProducts(); } });
+  nextBtn.addEventListener('click', ()=>{ if(currentPage < totalPages - 1){ currentPage++; loadProducts(); } });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const qParam = urlParams.get('q');
+  if (qParam) qInput.value = qParam;
+
+  loadMaterials().then(loadProducts);
+
+  // Submenús por click en mobile
+  (function () {
+    const mq = window.matchMedia('(max-width: 900px)');
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.submenu > a'); if (!trigger) return;
+      if (mq.matches) {
+        e.preventDefault();
+        const li = trigger.parentElement;
+        document.querySelectorAll('.submenu.open').forEach(x => { if (x !== li) x.classList.remove('open'); });
+        li.classList.toggle('open');
+      }
+    });
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.submenu-has-children > a'); if (!trigger) return;
+      if (mq.matches) {
+        e.preventDefault();
+        const li = trigger.parentElement;
+        li.classList.toggle('open');
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

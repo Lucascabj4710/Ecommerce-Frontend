@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script src="../js/checkJwt.js" defer></script>
+  <meta charset="UTF-8">
+  <title>Panel de Categorías</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Requisitos del header -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/normalize.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Estilos propios del panel de categorías -->
+  <style>
+    :root{
+      --bg:#fef0f8; --card:#ffffff; --text:#3a2c35; --muted:#9d758e;
+      --ring:rgba(0,0,0,.06); --brand:#ec4899; --brand-2:#db2777; --ok:#f472b6; --danger:#ef4444;
+      --radius:14px;
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+
+    body{
+      margin:0; padding:22px;
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; 
+      color:var(--text);
+      background: var(--bg);
+    }
+
+    .wrap{ max-width:980px; margin:0 auto; position:relative; z-index:1; }
+
+    h1{ text-align:center; margin:0 0 16px; font-size:clamp(1.4rem,2.8vw,2rem); color:var(--brand-2) }
+    h2{ margin:0 0 12px; font-size:1.1rem; color:var(--brand) }
+
+    .panel{
+      background:var(--card); border-radius:var(--radius); padding:16px;
+      box-shadow:0 8px 24px var(--ring), 0 1px 0 #ffe4f1; margin:0 0 18px;
+    }
+
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
+    .row-3{ display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:10px }
+    @media (max-width:720px){ .row, .row-3{ grid-template-columns:1fr } }
+
+    label{ font-size:.85rem; color:var(--muted) }
+    input[type="text"], input[type="number"]{
+      width:100%; padding:10px 12px; border:1px solid #f9a8d4; border-radius:10px; outline:none;
+      font-size:15px; background:#fff;
+    }
+    input:focus{ border-color:#f472b6; box-shadow:0 0 0 4px #fce7f3 }
+
+    .btn{ appearance:none; border:0; cursor:pointer; padding:10px 14px; border-radius:10px; color:#fff; font-weight:700; text-decoration:none; text-align:center; }
+    .btn-blue{ background:var(--brand) } .btn-blue:hover{ background:var(--brand-2)}
+    .btn-green{ background:var(--ok) } .btn-green:hover{ filter:brightness(.9)}
+    .btn-red{ background:var(--danger)} .btn-red:hover{ filter:brightness(.9)}
+    .btn:disabled{ opacity:.6; cursor:not-allowed }
+
+    .toolbar{
+      display:flex; gap:8px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      margin:6px 0 10px;
+    }
+    .searchbox{ display:flex; gap:8px; align-items:center; background:#fff; padding:8px; border-radius:12px; border:1px solid #fbcfe8; box-shadow:0 1px 2px var(--ring) }
+    .searchbox input{ border:0; padding:8px 6px; min-width:220px }
+    .meta{ color:var(--muted); font-size:.9rem; background:#fff; padding:6px 12px; border-radius:999px; box-shadow:0 1px 2px var(--ring) }
+
+    table{ width:100%; border-collapse:collapse }
+    th,td{ padding:12px; border-bottom:1px solid #fce7f3; text-align:center }
+    th{ background:#ec4899; color:#fff; position:sticky; top:0; z-index:1 }
+    tr:hover{ background:#fdf2f8 }
+    tr.selected{ outline:2px solid #f9a8d4; background:#fce7f3 }
+
+    .loader{
+      display:none; text-align:center; color:var(--brand-2); font-weight:700; padding:10px 0;
+    }
+
+    .toast{
+      position:fixed; right:16px; bottom:16px; z-index:9999; display:flex; flex-direction:column; gap:8px;
+    }
+    .toast .msg{
+      min-width:260px; background:#fff; border-left:6px solid var(--brand); padding:10px 12px; border-radius:10px;
+      box-shadow:0 10px 30px var(--ring);
+      animation: slideIn .2s ease-out;
+    }
+    .msg.ok{ border-left-color:var(--ok) }
+    .msg.err{ border-left-color:var(--danger) }
+    .msg small{ color:var(--muted) }
+    @keyframes slideIn{ from{ transform:translateY(8px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
+
+    .actions-inline{ display:flex; gap:6px; justify-content:center; }
+
+    /* BOTÓN VOLVER ESTILO MODERNO */
+    .btn-hover-raise {
+      font-size:1rem;
+      padding:10px 20px;
+      display:inline-block;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-hover-raise:hover {
+      transform: translateY(-4px);
+      box-shadow:0 8px 24px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+
+
+
+  <!-- CONTENIDO DEL PANEL -->
+  <div class="wrap">
+    <h1>📦 Panel de Administración — Categorías</h1>
+
+    <!-- CREAR -->
+    <div class="panel" id="panel-create">
+      <h2>Crear categoría</h2>
+      <div class="row">
+        <div>
+          <label for="categoryName">Nombre</label>
+          <input id="categoryName" type="text" placeholder="Ej: Anillos" />
+        </div>
+        <div style="display:flex; align-items:flex-end">
+          <button id="btnCreate" class="btn btn-blue" onclick="createCategory()">Crear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTAR -->
+    <div class="panel">
+      <div class="toolbar">
+        <div class="searchbox">
+          <span>🔎</span>
+          <input id="q" type="text" placeholder="Buscar por nombre…" />
+        </div>
+        <div class="meta" id="meta">—</div>
+      </div>
+
+      <div class="loader" id="loader">Cargando categorías…</div>
+
+      <table id="categoryTable" aria-live="polite">
+        <thead>
+          <tr>
+            <th style="width:140px">ID</th>
+            <th>Nombre</th>
+            <th style="width:220px">Acciones</th>
+          </tr>
+        </thead>
+        <tbody><!-- dinámico --></tbody>
+      </table>
+    </div>
+
+    <!-- EDITAR -->
+    <div class="panel" id="panel-edit">
+      <h2>Editar categoría</h2>
+      <div class="row-3">
+        <div>
+          <label for="editCategoryId">ID</label>
+          <input id="editCategoryId" type="number" placeholder="ID de la categoría" />
+        </div>
+        <div>
+          <label for="editCategoryName">Nuevo nombre</label>
+          <input id="editCategoryName" type="text" placeholder="Nuevo nombre" />
+        </div>
+        <div style="display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap">
+          <button class="btn btn-green" id="btnEdit" onclick="editCategory()">Guardar cambios</button>
+          <button class="btn btn-red" id="btnDelete" onclick="deleteCategory()">Eliminar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTÓN VOLVER -->
+    <div style="text-align:center; margin-top:20px;">
+      <a href="admin.html" class="btn btn-blue btn-hover-raise">
+        ← Volver al Panel de Admin
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts del header (dropdown móvil por click) -->
+  <script>
+    (function () {
+      const mq = window.matchMedia('(max-width: 900px)');
+
+      // Nivel 1 (Productos / Cuenta)
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.submenu > a');
+        if (!trigger) return;
+
+        if (mq.matches) {
+          e.preventDefault();
+          const li = trigger.parentElement;        // <li class="submenu">
+          // Cierra otros abiertos (opcional)
+          document.querySelectorAll('.submenu.open').forEach(x => { if (x !== li) x.classList.remove('open'); });
+          li.classList.toggle('open');
+        }
+      });
+
+      // Nivel 2 (Anillos / Pulseras / Collares)
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.submenu-has-children > a');
+        if (!trigger) return;
+
+        if (mq.matches) {
+          e.preventDefault();
+          const li = trigger.parentElement; // <li class="submenu-has-children">
+          li.classList.toggle('open');
+          const panel = li.querySelector('.subsubmenu-items');
+          if (panel) panel.style.display = (panel.style.display === 'block' ? 'none' : 'block');
+        }
+      });
+    })();
+  </script>
+
+  <!-- Scripts del panel -->
+  <script>
+    const BASE_URL = "http://localhost:8080/category";
+
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+
+    function toast(text, type='ok', sub=''){
+      const wrap = $('#toast');
+      const div = document.createElement('div');
+      div.className = `msg ${type}`;
+      div.innerHTML = `<strong>${text}</strong>${sub?`<br><small>${sub}</small>`:''}`;
+      wrap.appendChild(div);
+      setTimeout(()=> { div.style.opacity='0'; setTimeout(()=>div.remove(), 200); }, 2600);
+    }
+
+    function setLoading(is){ $('#loader').style.display = is ? 'block' : 'none'; }
+
+    async function fetchJSON(url, options){
+      const res = await fetch(url, options);
+      let data = null;
+      try { data = await res.json(); } catch {}
+      if(!res.ok){
+        const msg = data?.message || `HTTP ${res.status}`;
+        throw new Error(msg);
+      }
+      return data;
+    }
+
+    let allCategories = []; let filtered = [];
+    const meta = $('#meta');
+
+    async function createCategory(){
+      const nameInput = $('#categoryName');
+      const btn = $('#btnCreate');
+      const name = nameInput.value.trim();
+      if(!name){ toast('El nombre no puede estar vacío','err'); return; }
+      btn.disabled = true;
+      try{
+        const data = await fetchJSON(`${BASE_URL}/create`, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ name })
+        });
+        toast('Categoría creada', 'ok', data?.STATUS || '');
+        nameInput.value = '';
+        await loadCategories();
+      }catch(err){ toast('No se pudo crear','err', err.message); }
+      finally{ btn.disabled = false; }
+    }
+
+    async function loadCategories(){
+      setLoading(true);
+      try{
+        const data = await fetchJSON(`${BASE_URL}/get`);
+        allCategories = Array.isArray(data) ? data : [];
+        applyFilter();
+        meta.textContent = `${allCategories.length} categoría(s) en total`;
+      }catch(err){
+        $('tbody').innerHTML = `<tr><td colspan="3">Error cargando categorías</td></tr>`;
+        toast('Error al cargar','err', err.message);
+      }finally{ setLoading(false); }
+    }
+
+    async function editCategory(){
+      const id = Number($('#editCategoryId').value);
+      const name = $('#editCategoryName').value.trim();
+      const btn = $('#btnEdit');
+      if(!id || !name){ toast('ID y nombre son obligatorios','err'); return; }
+      btn.disabled = true;
+      try{
+        await fetchJSON(`${BASE_URL}/update/${id}`, {
+          method:'PUT', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ idCategory:id, name })
+        });
+        toast('Categoría actualizada','ok');
+        const idx = allCategories.findIndex(c => c.idCategory === id);
+        if(idx >= 0) allCategories[idx].name = name;
+        applyFilter(); highlightRow(id);
+      }catch(err){ toast('No se pudo editar','err', err.message); }
+      finally{ btn.disabled = false; }
+    }
+
+    async function deleteCategory(){
+      const id = Number($('#editCategoryId').value);
+      if(!id){ toast('Ingresá un ID para eliminar','err'); return; }
+      if(!confirm(`¿Eliminar la categoría #${id}?`)) return;
+      const btn = $('#btnDelete'); btn.disabled = true;
+      try{
+        const res = await fetch(`${BASE_URL}/delete/${id}`, { method:'DELETE' });
+        if(!res.ok) throw new Error('Endpoint DELETE no disponible');
+        toast('Categoría eliminada','ok');
+        allCategories = allCategories.filter(c => c.idCategory !== id);
+        applyFilter();
+        $('#editCategoryId').value = ''; $('#editCategoryName').value = '';
+      }catch(err){ toast('No se pudo eliminar','err', err.message); }
+      finally{ btn.disabled = false; }
+    }
+
+    function renderTable(list){
+      const tbody = $('tbody');
+      if(list.length === 0){
+        tbody.innerHTML = `<tr><td colspan="3">No hay categorías</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = '';
+      list.forEach(cat => {
+        const tr = document.createElement('tr');
+        tr.dataset.id = cat.idCategory;
+        tr.innerHTML = `
+          <td>${cat.idCategory}</td>
+          <td>${cat.name}</td>
+          <td>
+            <div class="actions-inline">
+              <button class="btn btn-green" data-act="pick">Editar</button>
+              <button class="btn btn-red" data-act="del">Borrar</button>
+            </div>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+      tbody.querySelectorAll('button').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+          const tr = e.currentTarget.closest('tr');
+          const id = Number(tr.dataset.id);
+          const cat = allCategories.find(c => c.idCategory === id);
+          if(!cat) return;
+          const act = e.currentTarget.dataset.act;
+          if(act === 'pick'){
+            $('#editCategoryId').value = cat.idCategory;
+            $('#editCategoryName').value = cat.name;
+            highlightRow(id);
+            window.scrollTo({ top: document.body.scrollHeight, behavior:'smooth' });
+          }else if(act === 'del'){
+            $('#editCategoryId').value = cat.idCategory;
+            $('#editCategoryName').value = cat.name;
+            deleteCategory();
+          }
+        });
+      });
+    }
+
+    function highlightRow(id){
+      $$('#categoryTable tbody tr').forEach(tr=> tr.classList.toggle('selected', Number(tr.dataset.id) === id));
+    }
+
+    function applyFilter(){
+      const q = $('#q').value.trim().toLowerCase();
+      filtered = !q ? allCategories.slice() :
+        allCategories.filter(c => (c.name||'').toLowerCase().includes(q) || String(c.idCategory).includes(q));
+      renderTable(filtered);
+      meta.textContent = `${filtered.length} resultado(s) • total ${allCategories.length}`;
+    }
+
+    function debounce(fn, ms=250){
+      let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); };
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      $('#q').addEventListener('input', debounce(applyFilter, 200));
+      document.querySelector('tbody').addEventListener('click', (e)=>{
+        const tr = e.target.closest('tr'); if(!tr) return;
+        const id = Number(tr.dataset.id);
+        const cat = allCategories.find(c => c.idCategory === id);
+        if(!cat) return;
+        $('#editCategoryId').value = cat.idCategory;
+        $('#editCategoryName').value = cat.name;
+        highlightRow(id);
+      });
+      loadCategories();
+    });
+  </script>
+
+  <!-- (Opcional) Popper y Bootstrap JS si los necesitás en esta página -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

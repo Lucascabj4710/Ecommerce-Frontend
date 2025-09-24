@@ -1,0 +1,158 @@
+/* perfil.css */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Nuevo contenedor para centrar el botón y el perfil */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 450px;
+}
+
+/* Estilo para el nuevo botón de Volver */
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 18px;
+    background-color: rgba(255, 255, 255, 0.6);
+    color: #442a38;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.2s ease-out;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.back-btn:hover {
+    background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+
+.profile-container {
+  background-color: #fff;
+  padding: 40px 50px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  width: 100%;
+  text-align: center;
+}
+
+.profile-container h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #ec4899, #f472b6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  text-align: left;
+  font-weight: 600;
+  color: #8b5f73;
+}
+
+input {
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 1px solid #f8c3d9;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #fff0f5;
+}
+
+input:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 6px rgba(236, 72, 153, 0.5);
+}
+
+input[readonly] {
+    background-color: #f9f9f9;
+    color: #888;
+    cursor: not-allowed;
+    border-color: #e0e0e0;
+}
+input[readonly]:focus {
+    box-shadow: none;
+    border-color: #e0e0e0;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+button, .cancel-btn {
+    flex-grow: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+button[type="submit"], #editBtn {
+  background: linear-gradient(90deg, #ec4899, #f472b6);
+}
+
+button[type="submit"]:hover, #editBtn:hover {
+  filter: brightness(0.95);
+  transform: translateY(-2px);
+}
+
+.cancel-btn {
+    background: #a0aec0;
+    color: #fff;
+}
+.cancel-btn:hover {
+    background: #718096;
+    transform: translateY(-2px);
+}
+
+.logout-btn {
+  margin-top: 20px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #f87171, #ef4444);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.logout-btn:hover {
+  filter: brightness(0.9);
+  transform: translateY(-2px);
+}
+
+#message {
+  margin-top: 15px;
+  font-weight: 600;
+  min-height: 20px;
+  color: #ec4899;
+}

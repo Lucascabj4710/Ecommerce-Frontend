@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script src="../js/checkJwt.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eliminar Productos - Paradiise</title>
+
+  <!-- Estilos base del sitio (para el header y fuentes) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/normalize.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+    :root{
+      --bg:#fff0f6;
+      --card:#ffffff;
+      --text:#3a1c2a;
+      --muted:#8c607a;
+      --brand1:#ec4899;
+      --brand2:#f472b6;
+      --danger:#dc2626;
+      --ring: rgba(236,72,153,.18);
+      --border: 1px solid rgba(236,72,153,.22);
+      --shadow-sm: 0 6px 20px rgba(236,72,153,.12);
+      --shadow-lg: 0 14px 36px rgba(236,72,153,.18);
+      --radius: 16px;
+    }
+
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 10% -10%, rgba(236,72,153,.12), transparent 60%),
+        radial-gradient(1200px 800px at 110% 10%, rgba(244,114,182,.12), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    }
+
+    main{ padding: 28px 18px 60px; }
+    .wrap{ max-width: 1200px; margin: 0 auto; }
+
+    .back-btn{
+      display:inline-flex; align-items:center; gap:.55rem;
+      padding:10px 14px; border-radius:12px; text-decoration:none; font-weight:800;
+      background:#fff; color:var(--brand1); border:var(--border);
+      box-shadow: var(--shadow-sm); margin: 14px 0 6px;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+    }
+    .back-btn:hover{ transform: translateY(-2px); background: linear-gradient(90deg, var(--brand1), var(--brand2)); color:#fff; box-shadow: var(--shadow-lg); }
+
+    h1{
+      margin: 8px 0 18px; text-align:center; font-weight: 800; letter-spacing:.2px;
+      font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.2rem);
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-shadow: 0 12px 40px rgba(236,72,153,.28);
+    }
+
+    .toolbar{
+      display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
+      margin-bottom: 12px;
+    }
+    .meta{ color:var(--muted); font-weight:600; font-size:.95rem; }
+    .meta:empty{ display:none; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: 14px;
+    }
+    .card{
+      background: var(--card);
+      border: var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 14px;
+      display:flex; flex-direction:column; align-items:center; gap:10px;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .card:hover{ transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .media{ width:100%; height:160px; display:grid; place-items:center; overflow:hidden; border-radius:12px; background:#fff; border:1px solid rgba(236,72,153,.12); }
+    .media img{ width:100%; height:100%; object-fit:contain; display:block; }
+    .name{ margin:2px 0 0; font-weight:800; text-align:center; font-size:1rem; color:#3a1c2a; }
+    .price{ margin:0; color:var(--brand1); font-weight:800; font-size:1.05rem; }
+
+    .delete-btn{
+      margin-top:8px; padding:10px 14px; border:none; border-radius:12px; cursor:pointer; font-weight:800;
+      color:#fff; background: linear-gradient(90deg, #ef4444, #dc2626);
+      box-shadow: 0 8px 24px rgba(220,38,38,.25);
+      transition: transform .16s ease, box-shadow .18s ease, filter .12s ease;
+      width: 100%;
+    }
+    .delete-btn:hover{ transform: translateY(-2px); filter: brightness(1.02); box-shadow: 0 12px 30px rgba(220,38,38,.35); }
+
+    .pagination{
+      display:flex; justify-content:center; gap:10px; margin-top:22px;
+    }
+    .pgbtn{
+      padding:10px 16px; border-radius:999px; border:var(--border); background:#fff; cursor:pointer; font-weight:800;
+      color:var(--brand1); box-shadow: var(--shadow-sm);
+      transition: transform .16s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+    }
+    .pgbtn:hover:not(:disabled){ transform:translateY(-2px); background: linear-gradient(90deg, var(--brand1), var(--brand2)); color:#fff; box-shadow: var(--shadow-lg); }
+    .pgbtn:disabled{ opacity:.6; cursor:not-allowed; }
+
+    #message{ text-align:center; font-weight:800; margin-top:16px; }
+    .success{ color:#16a34a; } .error{ color:#dc2626; }
+
+    .modal-overlay{
+      position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:2000;
+    }
+    .modal-overlay.show{ display:flex; }
+    .modal{
+      width:min(92%,420px); background:#fff; border-radius:16px; padding:22px; box-shadow: var(--shadow-lg); border:var(--border);
+    }
+    .modal h3{ margin:0 0 8px; font-size:1.2rem; }
+    .modal p{ margin:0 0 16px; color:var(--muted); }
+    .modal-actions{ display:flex; gap:10px; }
+    .btn{ flex:1; padding:12px; border:none; border-radius:12px; cursor:pointer; font-weight:800; }
+    .btn.cancel{ background:#eef2f7; color:#334155; }
+    .btn.ok{ background: linear-gradient(90deg, #ef4444, #dc2626); color:#fff; }
+  </style>
+</head>
+<body>
+
+
+
+  <main>
+    <div class="wrap">
+      <a href="admin.html" class="back-btn">← Volver al Panel Admin</a>
+      <h1>Eliminar Productos</h1>
+
+      <div class="toolbar">
+        <div class="meta" id="meta" aria-live="polite"></div>
+      </div>
+
+      <div id="products" class="grid" aria-live="polite"></div>
+
+      <div class="pagination">
+        <button id="prev" class="pgbtn">Anterior</button>
+        <button id="next" class="pgbtn">Siguiente</button>
+      </div>
+
+      <div id="message"></div>
+    </div>
+  </main>
+
+  <!-- Modal de confirmación -->
+  <div id="confirmModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="cm-title">
+    <div class="modal">
+      <h3 id="cm-title">Confirmar eliminación</h3>
+      <p id="cm-msg">¿Seguro que querés eliminar este producto?</p>
+      <div class="modal-actions">
+        <button type="button" class="btn cancel" id="cm-cancel">Cancelar</button>
+        <button type="button" class="btn ok" id="cm-ok">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const API = 'http://localhost:8080';
+      const productsEl = document.getElementById('products');
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+      const message = document.getElementById('message');
+      const meta = document.getElementById('meta');
+
+      // Modal
+      const modal = document.getElementById('confirmModal');
+      const cmMsg = document.getElementById('cm-msg');
+      const cmOk = document.getElementById('cm-ok');
+      const cmCancel = document.getElementById('cm-cancel');
+
+      const token = localStorage.getItem('jwtToken') || '';
+
+      let currentPage = 0;
+      const pageSize = 8;
+      let totalPages = 1;
+
+      function authFetch(url, opts={}){
+        const headers = opts.headers || {};
+        if(token) headers['Authorization'] = 'Bearer ' + token;
+        return fetch(url, { ...opts, headers });
+      }
+
+      function showMessage(text, type){
+        message.textContent = text;
+        message.className = type || '';
+      }
+
+      function fallbackImg(img){
+        img.onerror = null;
+        img.src = 'https://via.placeholder.com/600x450?text=Imagen+no+disponible';
+      }
+
+      function confirmDialog(text){
+        cmMsg.textContent = text || '¿Seguro?';
+        modal.classList.add('show');
+        return new Promise(resolve=>{
+          function close(v){
+            modal.classList.remove('show');
+            cmOk.removeEventListener('click', onOk);
+            cmCancel.removeEventListener('click', onCancel);
+            resolve(v);
+          }
+          function onOk(){ close(true); }
+          function onCancel(){ close(false); }
+          cmOk.addEventListener('click', onOk);
+          cmCancel.addEventListener('click', onCancel);
+          modal.addEventListener('click', e=>{ if(e.target === modal) close(false); }, { once:true });
+        });
+      }
+
+      function productCard(p){
+        const card = document.createElement('div');
+        card.className = 'card';
+        const imgUrl = p.imageUrl ? (API + p.imageUrl) : 'https://via.placeholder.com/600x450?text=Sin+imagen';
+        card.innerHTML = `
+          <div class="media"><img alt="${p.name}" src="${imgUrl}"></div>
+          <div class="name" title="${p.name}">${p.name}</div>
+          <p class="price">$${(p.price ?? 0).toLocaleString('es-AR')}</p>
+          <button class="delete-btn" type="button">Eliminar</button>
+        `;
+        const img = card.querySelector('img');
+        img.addEventListener('error', ()=>fallbackImg(img));
+
+        const btn = card.querySelector('.delete-btn');
+        btn.addEventListener('click', async ()=>{
+          const ok = await confirmDialog(`¿Eliminar “${p.name}”?`);
+          if(!ok) return;
+          try{
+            const res = await authFetch(`${API}/products/delete/${p.id}`, { method:'DELETE' });
+            if(!res.ok) throw new Error(await res.text());
+            showMessage('Producto eliminado correctamente!', 'success');
+
+            // Si la página queda vacía y no es la primera, retrocede una página
+            await loadProducts(currentPage, true);
+          }catch(err){
+            console.error(err);
+            showMessage('Error: ' + (err.message || 'No se pudo eliminar'), 'error');
+          }
+        });
+
+        return card;
+      }
+
+      async function loadProducts(page=0, keepPage=false){
+        productsEl.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:24px">Cargando productos…</div>';
+        meta.textContent = ''; // Asegura que no se muestre “palito” cuando no hay datos
+        try{
+          const res = await authFetch(`${API}/products/get?page=${page}&size=${pageSize}`);
+          if(!res.ok) throw new Error('Error API');
+          const data = await res.json();
+
+          productsEl.innerHTML = '';
+          if(!data.content || data.content.length === 0){
+            productsEl.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:36px">No hay productos para mostrar.</div>';
+          }else{
+            data.content.forEach(p => productsEl.appendChild(productCard(p)));
+          }
+
+          // Paginación
+          currentPage = data.number ?? page;
+          totalPages  = data.totalPages ?? 1;
+          prevBtn.disabled = data.first;
+          nextBtn.disabled = data.last;
+
+          const total = data.totalElements ?? '';
+          meta.textContent = `Página ${currentPage + 1} de ${totalPages}${total !== '' ? ` • ${total} producto(s)` : ''}`;
+
+          // Si después de borrar no queda nada en la página, retrocede 1
+          if(keepPage && data.content && data.content.length === 0 && currentPage > 0){
+            currentPage--;
+            await loadProducts(currentPage);
+          }
+        }catch(err){
+          console.error(err);
+          productsEl.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:36px">Error al cargar productos.</div>';
+          meta.textContent = ''; // Oculta meta en error
+        }
+      }
+
+      prevBtn.addEventListener('click', ()=>{ if(currentPage>0){ currentPage--; loadProducts(currentPage); } });
+      nextBtn.addEventListener('click', ()=>{ if(currentPage < totalPages-1){ currentPage++; loadProducts(currentPage); } });
+
+      loadProducts(currentPage);
+    })();
+  </script>
+
+  <!-- JS opcional Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

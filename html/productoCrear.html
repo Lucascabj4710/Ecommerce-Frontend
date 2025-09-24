@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script src="../js/checkJwt.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Producto - Paradiise</title>
+
+  <!-- Bootstrap, Normalize, FontAwesome y tu CSS global -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/normalize.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+    :root{
+      --bg1:#ffeef7; --bg2:#fff7fb; --card:#ffffff; --text:#3a1c2a; --muted:#8c607a;
+      --brand1:#ec4899; --brand2:#f472b6; --ring: rgba(236,72,153,.15);
+      --border: 1px solid rgba(236,72,153,.18);
+      --shadow-sm: 0 6px 18px rgba(236,72,153,.12);
+      --shadow-lg: 0 14px 36px rgba(236,72,153,.16);
+      --radius: 16px;
+    }
+    html, body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(165deg, var(--bg1) 0%, var(--bg2) 100%);
+    }
+
+    main{ padding: 28px 16px 60px; }
+    .wrap{ max-width: 860px; margin: 0 auto; }
+
+    .back-btn{
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:10px 14px; border-radius:12px; text-decoration:none; font-weight:700;
+      background:#fff; color:var(--brand1); border:var(--border);
+      box-shadow: var(--shadow-sm); margin-bottom: 14px;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+    }
+    .back-btn:hover{ transform: translateY(-2px); background: linear-gradient(90deg, var(--brand1), var(--brand2)); color:#fff; box-shadow: var(--shadow-lg); }
+
+    .card-form{
+      background: var(--card);
+      border: var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 28px;
+    }
+    .card-form h1{
+      margin: 0 0 8px; text-align:center; font-weight: 800;
+      font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-shadow: 0 12px 40px rgba(236,72,153,.28);
+    }
+    .subtitle{ text-align:center; margin: 0 0 22px; color: var(--muted); }
+
+    form{ display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media (max-width:720px){ form{ grid-template-columns: 1fr; } }
+    .field{ display:flex; flex-direction:column; }
+    .field label{ font-weight:700; margin-bottom:6px; color:#4b2b39; }
+    .hint{ font-size:.85rem; color:var(--muted); margin-top: 6px; }
+
+    input[type="text"], input[type="number"], select, input[type="file"]{
+      padding: 12px 14px; border-radius: 12px; border: 1.6px solid rgba(236,72,153,.25);
+      background: #fff; color: var(--text); font-size: 1rem;
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    input:focus, select:focus, input[type="file"]:focus{
+      outline:none; border-color: var(--brand1); box-shadow: 0 0 0 4px var(--ring); background: #fff;
+    }
+    select{
+      appearance:none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #7a5570 50%),
+        linear-gradient(135deg, #7a5570 50%, transparent 50%),
+        linear-gradient(to right, rgba(236,72,153,.3), rgba(236,72,153,.3));
+      background-position:
+        calc(100% - 22px) calc(50% - 3px),
+        calc(100% - 15px) calc(50% - 3px),
+        calc(100% - 38px) 50%;
+      background-size: 6px 6px, 6px 6px, 1px 1.4em;
+      background-repeat: no-repeat;
+    }
+
+    #previewImage{
+      grid-column: 1 / -1; max-width: 100%; display: none;
+      border-radius: 12px; border: 1px dashed rgba(236,72,153,.35);
+      padding: 8px; background: #fff9fc; box-shadow: 0 6px 18px rgba(236,72,153,.12);
+    }
+
+    .actions{ grid-column: 1 / -1; display:flex; justify-content:center; }
+    button{
+      padding: 14px 20px; border: none; border-radius: 12px; cursor:pointer; font-weight:800; font-size: 1.05rem;
+      background: linear-gradient(90deg, var(--brand1), var(--brand2)); color:#fff;
+      box-shadow: 0 10px 24px rgba(236,72,153,.25);
+      transition: transform .16s ease, box-shadow .18s ease, filter .12s ease;
+    }
+    button:hover{ transform: translateY(-2px); box-shadow: 0 14px 32px rgba(236,72,153,.35); filter: brightness(1.02); }
+    #message{ grid-column: 1 / -1; text-align:center; font-weight:700; margin-top: 6px; }
+    .success-message{ color:#16a34a; } .error-message{ color:#dc2626; }
+  </style>
+</head>
+<body>
+
+  <main>
+    <div class="wrap">
+      <a class="back-btn" href="admin.html">← Volver al Panel Admin</a>
+
+      <div class="card-form" role="main" aria-label="Formulario para crear nuevo producto">
+        <h1>Crear nuevo producto</h1>
+        <p class="subtitle">Completá los datos del producto y agregá una imagen opcional</p>
+
+        <form id="productForm" enctype="multipart/form-data" novalidate>
+          <div class="field">
+            <label for="name">Nombre *</label>
+            <input type="text" id="name" placeholder="Nombre del producto" required aria-required="true" />
+          </div>
+          <div class="field">
+            <label for="price">Precio *</label>
+            <input type="number" id="price" placeholder="Precio ARS" step="0.01" min="0" required aria-required="true" />
+          </div>
+          <div class="field">
+            <label for="color">Color</label>
+            <input type="text" id="color" placeholder="Color del producto" />
+          </div>
+          <div class="field">
+            <label for="material">Material</label>
+            <input type="text" id="material" placeholder="Material del producto" />
+          </div>
+          <div class="field">
+            <label for="waist">Talle</label>
+            <input type="text" id="waist" placeholder="Talle o medida" />
+          </div>
+          <!-- NUEVO CAMPO DESCRIPTION -->
+          <div class="field" style="grid-column: 1 / -1;">
+            <label for="description">Descripción</label>
+            <input type="text" id="description" placeholder="Descripción del producto" />
+            <p class="hint">Opcional: describí el producto brevemente</p>
+          </div>
+          <div class="field">
+            <label for="categoryInput">Categoría *</label>
+            <select id="categoryInput" required aria-required="true">
+              <option value="" disabled selected>Seleccioná una categoría</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="stock">Stock *</label>
+            <input type="number" id="stock" placeholder="Cantidad en stock" min="0" required aria-required="true" />
+          </div>
+          <div class="field" style="grid-column:1 / -1;">
+            <label for="file">Imagen del producto</label>
+            <input type="file" id="file" accept="image/*" />
+            <p class="hint">Formatos: JPG, PNG, WEBP. Tamaño recomendado: 1200×900</p>
+          </div>
+
+          <img id="previewImage" alt="Vista previa de imagen" />
+
+          <div class="actions">
+            <button type="submit" aria-label="Crear producto">Crear Producto</button>
+          </div>
+          <div id="message" role="alert" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const API_URL = 'http://localhost:8080';
+      const form = document.getElementById('productForm');
+      const messageDiv = document.getElementById('message');
+      const fileInput = document.getElementById('file');
+      const previewImage = document.getElementById('previewImage');
+      const categorySelect = document.getElementById('categoryInput');
+
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      function showMessage(text, type) {
+        messageDiv.textContent = text;
+        messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+      }
+
+      async function cargarCategorias() {
+        try {
+          const res = await fetch(`${API_URL}/category/get`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (!res.ok) throw new Error('Error al cargar categorías');
+          const categorias = await res.json();
+          categorySelect.innerHTML = '<option value="" disabled selected>Seleccioná una categoría</option>';
+          (Array.isArray(categorias) ? categorias : []).forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.idCategory;
+            option.textContent = cat.name || `Categoría ${cat.idCategory}`;
+            categorySelect.appendChild(option);
+          });
+        } catch (error) {
+          console.error(error);
+          showMessage('No se pudieron cargar las categorías.', 'error');
+        }
+      }
+
+      cargarCategorias();
+
+      // Vista previa imagen
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            previewImage.src = e.target.result;
+            previewImage.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        } else {
+          previewImage.src = '';
+          previewImage.style.display = 'none';
+        }
+      });
+
+      // Enviar formulario con JWT
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        messageDiv.textContent = '';
+        messageDiv.className = '';
+
+        const nombre      = document.getElementById('name').value.trim();
+        const precio      = parseFloat(document.getElementById('price').value);
+        const stock       = parseInt(document.getElementById('stock').value, 10);
+        const color       = document.getElementById('color').value.trim();
+        const material    = document.getElementById('material').value.trim();
+        const waist       = document.getElementById('waist').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const idCatValue  = categorySelect.value;
+
+        if (!nombre || isNaN(precio) || precio < 0 || isNaN(stock) || stock < 0) {
+          showMessage('Por favor completá todos los campos obligatorios correctamente.', 'error');
+          return;
+        }
+        if (!idCatValue) {
+          showMessage('Por favor seleccioná una categoría.', 'error');
+          return;
+        }
+
+        const productDto = {
+          name: nombre,
+          price: precio,
+          color: color || null,
+          material: material || null,
+          waist: waist || null,
+          description: description || null, // NUEVO CAMPO
+          idCategory: Number(idCatValue),
+          stock: stock
+        };
+
+        const formData = new FormData();
+        formData.append('productDto', JSON.stringify(productDto));
+        if (fileInput.files.length > 0) formData.append('file', fileInput.files[0]);
+
+        try {
+          const response = await fetch(`${API_URL}/products/create`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: formData
+          });
+
+          if (response.status === 401 || response.status === 403) {
+            window.location.replace('login.html');
+            return;
+          }
+
+          if (!response.ok) throw new Error(await response.text());
+          showMessage('¡Producto creado correctamente!', 'success');
+          form.reset();
+          previewImage.src = '';
+          previewImage.style.display = 'none';
+        } catch (error) {
+          console.error(error);
+          showMessage('Error: ' + (error?.message || 'No se pudo crear el producto'), 'error');
+        }
+      });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    width: 350px;
+    text-align: center;
+}
+
+.login-container h2 {
+    font-family: "Satisfy", cursive;
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgb(218, 105, 180);
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1.4rem;
+    box-sizing: border-box;
+}
+
+.login-container button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: violet;
+    color: white;
+    border: none;
+    border-radius: 10%;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.login-container button[type="submit"]:hover {
+    background-color: lightcoral;
+    transform: scale(1.05);
+}
+
+#message {
+    color: red;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+/* --- Contenedor y ojito corregidos --- */
+.password-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.password-container input {
+    padding-right: 40px; /* deja espacio para el botón */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #555;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

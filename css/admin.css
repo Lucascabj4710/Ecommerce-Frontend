@@ -1,0 +1,172 @@
+/* RESET BÁSICO */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ######################################################################################## */
+/* Grid principal: menú lateral y contenido */
+.principal-grid{
+  display: grid;
+  grid-template-columns: 25% 75%;
+  height: 100vh; /* ocupa toda la pantalla */
+  width: 100vw;  /* cubre todo el ancho */
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .principal-grid{
+    grid-template-columns: 40% 60%;
+  }
+}
+
+/* Panel lateral */
+.principal-1{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #2c2c2c; /* gris oscuro */
+  padding: 2rem 1rem;
+  height: 100vh;
+  overflow-y: auto; /* permite scroll si hay muchos items */
+}
+
+/* Contenido principal */
+.principal-2{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+  overflow-y: auto;
+}
+
+/* Navegación */
+.principal-navegacion{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.principal-navegacion ul {
+  list-style: none;
+}
+
+.principal-navegacion > ul > li {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.principal-navegacion > ul > li > a {
+  text-decoration: none;
+  color: white;
+  text-transform: uppercase;
+  background-color: #1b1b1b;
+  padding: 1rem 2rem;
+  display: block;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.principal-navegacion > ul > li > a:hover {
+  background-color: #333;
+}
+
+/* Submenús desplegables */
+.submenu {
+  list-style: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #333;
+  min-width: 220px;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1000;
+}
+
+.submenu li a {
+  padding: 0.8rem 1.5rem;
+  color: #ddd;
+  display: block;
+}
+
+.submenu li a:hover {
+  background-color: #444;
+  color: #fff;
+}
+
+/* Mostrar submenú al hover */
+.principal-navegacion > ul > li:hover > .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Scroll en menú lateral */
+.principal-1::-webkit-scrollbar {
+  width: 6px;
+}
+.principal-1::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 3px;
+}
+
+/* Botón cerrar sesión corregido */
+.cerrar-session {
+  position: relative;
+  border: 0;
+  padding: 12px 22px;
+  color: #fff;           /* texto siempre visible */
+  background: #3498db;
+  cursor: pointer;
+  font: 600 16px/1.2 system-ui, sans-serif;
+  border-radius: 6px;
+  margin: 20px 0;
+  width: 90%;
+  text-align: center;
+  z-index: 1;
+  overflow: visible;     /* asegurar que no corte nada */
+}
+
+.cerrar-session .btn-label {
+  position: relative;
+  z-index: 10;
+}
+
+/* Eliminamos ::before y ::after que tapaban el texto */
+.cerrar-session::before,
+.cerrar-session::after {
+  display: none;
+}
+
+/* Hover simple solo cambia el color de fondo */
+.cerrar-session:hover {
+  background: #4f7ef3;
+}
+
+/* Contenido principal */
+.principal-2 p {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    font-size: 1.8rem;
+    color: #333;
+    line-height: 1.6;
+    max-width: 600px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.principal-2 p:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+}

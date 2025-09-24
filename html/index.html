@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Página Principal - Paradiise</title>
+
+  <!-- Bootstrap CSS y FontAwesome -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/normalize.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    /* Imagen full-bleed (a ancho completo del viewport) */
+    .presentacion-bleed{
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      margin-top: 24px;
+      margin-bottom: 8px;
+      line-height: 0; /* elimina espacio fantasma alrededor de la imagen */
+    }
+    .presentacion-bleed img{
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 0;
+      border-radius: 0;         /* full-bleed sin bordes redondeados */
+    }
+
+    /* Ajuste rápido del marquee en pantallas pequeñas */
+    @media (max-width: 576px){
+      .text-marquee{ font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hero">
+    <nav id="navbar" class="navegacion-principal contenedor">
+      <ul class="menu">
+        <li><a href="#">Inicio</a></li>
+
+        <li class="submenu">
+          <a href="getProducts.html">Productos <i class="fa-solid fa-caret-down"></i></a>
+          <ul class="submenu-items">
+            <!-- Categorías principales -->
+            <li class="submenu-has-children">
+              <a href="getProducts.html?q=anillo">Anillos <i class="fa-solid fa-chevron-right"></i></a>
+              <ul class="subsubmenu-items">
+                <li><a href="getProducts.html?q=anillo&material=plata925">Plata 925</a></li>
+                <li><a href="getProducts.html?q=anillo&material=acero-quirurgico">Acero quirúrgico</a></li>
+                <li><a href="getProducts.html?q=anillo&material=acero-blanco">Acero blanco</a></li>
+                <li><a href="getProducts.html?q=anillo&material=adero-dorado">Adero dorado</a></li>
+              </ul>
+            </li>
+
+            <li class="submenu-has-children">
+              <a href="getProducts.html?q=pulsera">Pulseras <i class="fa-solid fa-chevron-right"></i></a>
+              <ul class="subsubmenu-items">
+                <li><a href="getProducts.html?q=pulsera&material=plata925">Plata 925</a></li>
+                <li><a href="getProducts.html?q=pulsera&material=acero-quirurgico">Acero quirúrgico</a></li>
+                <li><a href="getProducts.html?q=pulsera&material=acero-blanco">Acero blanco</a></li>
+                <li><a href="getProducts.html?q=pulsera&material=adero-dorado">Adero dorado</a></li>
+              </ul>
+            </li>
+
+            <li class="submenu-has-children">
+              <a href="getProducts.html?q=collar">Collares <i class="fa-solid fa-chevron-right"></i></a>
+              <ul class="subsubmenu-items">
+                <li><a href="getProducts.html?q=collar&material=plata925">Plata 925</a></li>
+                <li><a href="getProducts.html?q=collar&material=acero-quirurgico">Acero quirúrgico</a></li>
+                <li><a href="getProducts.html?q=collar&material=acero-blanco">Acero blanco</a></li>
+                <li><a href="getProducts.html?q=collar&material=adero-dorado">Adero dorado</a></li>
+              </ul>
+            </li>
+
+            <!-- Otras secciones pedidas -->
+            <li><a href="getProducts.html?q=relojes">Relojes</a></li>
+            <li><a href="getProducts.html?q=carteras">Carteras</a></li>
+          </ul>
+        </li>
+
+        <!-- Nuestras_Joyas eliminado según pedido -->
+
+        <li><a href="contacto.html">Contacto</a></li>
+
+        <li class="submenu">
+          <a href="#">Cuenta <i class="fa-solid fa-caret-down"></i></a>
+          <ul class="submenu-items">
+            <li><a href="login.html">Iniciar sesión</a></li>
+            <li><a href="login.html">Registrarme</a></li>
+            <li><a href="admin.html">Panel de control ADMIN</a></li>
+            <li><a href="dashboard.html">Mi perfil</a></li>
+            <li><a href="logout.php">Cerrar sesión</a></li>
+          </ul>
+        </li>
+
+        <li class="carrito">
+          <a href="carrito.html" aria-label="Carrito">
+            <img src="../imagenes/carrito2.png" alt="Carrito" width="32" height="32" />
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="contenedor text-center py-5">
+  <h1 class="satisfy-regular">Bienvenido a Paradiise</h1>
+  <marquee class="text-marquee" behavior="scroll" direction="left" scrollamount="5">
+    <p>Aquí puedes navegar por nuestras secciones y descubrir nuestros productos.</p>
+  </marquee>
+
+  <!-- Imagen full-bleed (ancho completo) -->
+  <div class="presentacion-bleed">
+    <img
+      src="../imagenes/presentancion.png"
+      alt="Presentación Paradiise"
+      class="img-fluid"
+    >
+  </div>
+</main>
+
+<footer class="formato-footer">
+  <div class="footer-flex-general contenedor">
+    <div class="footer-flex-iconos">
+      <ul class="rrss">
+        <li><a href="https://wa.me/5491122334455" target="_blank"><i class="fa-brands fa-whatsapp"></i></a></li>
+        <li><a href="https://facebook.com/tupagina" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
+        <li><a href="https://instagram.com/tuusuario" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
+        <li><a href="https://tiktok.com/@tuusuario" target="_blank"><i class="fa-brands fa-tiktok"></i></a></li>
+      </ul>
+    </div>
+    <div class="footer-flex-enlaces">
+      <a href="#">Inicio</a>
+      <a href="getProducts.html">Productos</a>
+      <a href="#">Nuestras Joyas</a>
+      <a href="#">Contacto</a>
+      <a href="#">Cuenta</a>
+    </div>
+  </div>
+  <div>
+    <p class="derechos_reservados">Todos los derechos reservados Paradiise</p>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="../js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script src="../js/index.js"></script>
+
+</body>
+</html>

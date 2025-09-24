@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel Mejorado</title>
+<link rel="stylesheet" href="../css/admin.css">
+<script src="../js/checkJwt.js" defer></script>
+</head>
+<body>
+
+<main class="principal-grid">
+  <div class="principal-1">
+    <nav class="principal-navegacion">
+      <ul>
+        <li><a href="getOrderDetail.html">Ver Todas las Órdenes</a></li>
+        <li>
+          <a href="#">Productos</a>
+          <ul class="submenu">
+            <li><a href="productoCrear.html">Agregar Producto</a></li>
+            <li><a href="#">Editar Producto</a></li>
+            <li><a href="deleteproduct2.html">Eliminar Producto</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="categoryPanel.html">Categorías</a>
+        </li>
+        <li>
+          <a href="#">Usuarios</a>
+          <ul class="submenu">
+            <li><a href="getUsers.html">Mostrar Usuarios</a></li>
+            <li><a href="createUser.html">Agregar Usuario</a></li>
+            <li><a href="#">Editar Usuario</a></li>
+            <li><a href="#">Eliminar Usuario</a></li>
+          </ul>
+        </li>
+        <li><a href="index.html">Volver</a></li>
+      </ul>
+    </nav>
+    <button class="cerrar-session">Cerrar Sesión</button>
+  </div>
+
+  <div class="principal-2">
+    <p id="welcomeMsg">Bienvenido al panel de administración.<br>
+    Gestiona productos, categorías, usuarios y permisos de forma rápida y clara.</p>
+  </div>
+</main>
+
+<script>
+  // Mostrar username del token
+  const token = localStorage.getItem('jwtToken');
+  if (token) {
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const payloadJson = atob(payloadBase64);
+      const payload = JSON.parse(payloadJson);
+      const username = payload.username || payload.sub || "Usuario";
+
+      const welcome = document.getElementById('welcomeMsg');
+      welcome.innerHTML = `Bienvenido, <strong>${username}</strong> al panel de administración.<br>
+      Gestiona productos, categorías, usuarios y permisos de forma rápida y clara.`;
+    } catch (err) {
+      console.error("Error al decodificar token:", err);
+    }
+  }
+
+  // Cerrar sesión: eliminar token y redirigir
+  document.querySelector('.cerrar-session').addEventListener('click', () => {
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('roles'); // opcional si guardaste roles
+    window.location.href = '../html/login.html'; // redirige al login
+  });
+</script>
+
+</body>
+</html>

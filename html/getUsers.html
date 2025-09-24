@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clientes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="../js/checkJwt.js" defer></script>
+
+  <!-- Header / estilos globales -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/normalize.css"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+
+  <style>
+    :root{
+      --bg: #fff0f5;
+      --card: #ffe4ec;
+      --muted: #8b5f73;
+      --text: #442a38;
+      --brand1: #ec4899;
+      --brand2: #f472b6;
+      --shadow-lg: 0 10px 30px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.1);
+      --shadow-sm: 0 4px 14px rgba(0,0,0,.15);
+      --row: rgba(255,182,193,.15);
+      --row-alt: rgba(255,182,193,.2);
+      --row-hover: rgba(236,72,153,.1);
+      --border: 1px solid rgba(236,72,153,.2);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body{
+      margin:0; padding:0;
+      background:
+        radial-gradient(1200px 800px at 10% -10%, rgba(236,72,153,.12), transparent 60%),
+        radial-gradient(1200px 800px at 110% 10%, rgba(244,114,182,.12), transparent 60%),
+        var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+    }
+
+    /* Contenido principal bajo el header */
+    .page{
+      max-width: 1100px;
+      margin: 24px auto 48px;
+      padding: 0 24px;
+    }
+
+    /* Botón volver (mejor ubicación y contraste) */
+    .back-btn{
+      display:inline-block; margin: 10px 0 14px; padding:10px 16px; border-radius:999px;
+      background:#fff; color:#ec4899; text-decoration:none; font-weight:700;
+      border: 1px solid rgba(236,72,153,.25);
+      box-shadow: 0 6px 20px rgba(236,72,153,.18);
+      transition: transform .18s ease, background .2s, color .2s;
+    }
+    .back-btn:hover{
+      transform: translateY(-2px);
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      color: #fff;
+      box-shadow: 0 10px 28px rgba(236,72,153,.28);
+    }
+
+    h1{
+      margin: 8px 0 22px; text-align:center; font-weight: 800; letter-spacing:.2px;
+      font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2.1rem);
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-shadow: 0 10px 40px rgba(236,72,153,.25);
+    }
+
+    .card{
+      background: var(--card);
+      border: var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .card-header{
+      display:flex; align-items:center; gap:12px; padding:16px 18px; border-bottom: var(--border);
+      background: linear-gradient(90deg, rgba(236,72,153,.1), rgba(244,114,182,.1));
+    }
+
+    .search{
+      margin-left:auto; position: relative; width: min(260px, 60%);
+    }
+    .search input{
+      width: 100%; padding: 10px 12px 10px 36px; border-radius: 10px; border: var(--border);
+      background: rgba(255,255,255,.5); color: var(--text); outline: none; box-shadow: var(--shadow-sm);
+    }
+    .search svg{ position:absolute; left:10px; top:50%; transform: translateY(-50%); opacity:.6; color: var(--brand1); }
+
+    .table-wrap{ width:100%; overflow:auto; }
+    table{ width:100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+
+    thead th{
+      position: sticky; top:0; z-index:2; text-align:left; padding:14px 16px;
+      text-transform: uppercase; letter-spacing:.6px; font-weight:700; font-size:12px;
+      background: linear-gradient(90deg, var(--brand1), var(--brand2)); color: #fff0f5;
+    }
+
+    tbody tr{ transition: .18s ease; }
+    tbody tr:nth-child(odd){ background: var(--row); }
+    tbody tr:nth-child(even){ background: var(--row-alt); }
+    tbody tr:hover{ background: var(--row-hover); }
+
+    th, td{ padding: 14px 16px; border-bottom: 1px solid rgba(236,72,153,.2); }
+
+    .loader{ display:none; gap:10px; align-items:center; justify-content:center; margin: 16px 0; color: var(--brand1); font-weight:600; }
+    .spinner{ width:18px; height:18px; border-radius:50%; border:2px solid rgba(236,72,153,.25); border-top-color: var(--brand1); animation: spin .9s linear infinite; }
+    @keyframes spin{ to { transform: rotate(360deg); } }
+
+    .empty{
+      text-align:center; padding: 40px 16px; color: var(--muted);
+    }
+
+    @media (max-width: 760px){
+      th, td{ padding: 12px 12px; font-size: 13px; }
+      .card-header{ flex-wrap: wrap; gap: 10px; }
+      .search{ width:100%; }
+    }
+  </style>
+</head>
+<body>
+
+
+  <main class="page">
+    <a href="admin.html" class="back-btn">← Volver al Panel Admin</a>
+    <h1>Lista de Clientes</h1>
+
+    <div class="card">
+      <div class="card-header">
+        <div style="font-weight:700; opacity:.9">Clientes</div>
+        <div class="search" role="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/></svg>
+          <input id="filterInput" type="text" placeholder="Filtrar por nombre, DNI o email…" aria-label="Filtrar tabla" />
+        </div>
+      </div>
+
+      <div class="loader" id="loader"><span class="spinner" aria-hidden="true"></span> Cargando clientes…</div>
+
+      <div class="table-wrap">
+        <table id="clientTable" aria-describedby="tabla de clientes">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>DNI</th>
+              <th>Teléfono</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Se carga con JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty" id="emptyState" style="display:none">No hay clientes registrados</div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const loader = document.getElementById("loader");
+      const tableBody = document.querySelector("#clientTable tbody");
+      const empty = document.getElementById("emptyState");
+
+      loader.style.display = "flex";
+
+      try {
+        const response = await fetch("http://localhost:8080/client/get");
+        if (!response.ok) throw new Error("Error en la petición");
+
+        const data = await response.json();
+        loader.style.display = "none";
+
+        if (!Array.isArray(data) || data.length === 0) {
+          empty.style.display = "block";
+          return;
+        }
+
+        data.forEach(client => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${client.name ?? "—"}</td>
+            <td>${client.lastname ?? "—"}</td>
+            <td>${client.dni ?? "—"}</td>
+            <td>${client.phoneNumber ?? "—"}</td>
+            <td>${client.email ?? "—"}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+
+        const input = document.getElementById("filterInput");
+        input.addEventListener("input", () => {
+          const q = input.value.toLowerCase();
+          let visible = 0;
+          Array.from(tableBody.rows).forEach(r => {
+            const text = r.textContent.toLowerCase();
+            const match = text.includes(q);
+            r.style.display = match ? "table-row" : "none";
+            if (match) visible++;
+          });
+          empty.style.display = visible ? "none" : "block";
+        });
+
+      } catch (error) {
+        loader.style.display = "none";
+        tableBody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding:24px'>Error cargando clientes</td></tr>";
+        console.error(error);
+      }
+    });
+
+    /* Submenús por click en mobile */
+    (function () {
+      const mq = window.matchMedia('(max-width: 900px)');
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.submenu > a'); if (!trigger) return;
+        if (mq.matches) {
+          e.preventDefault();
+          const li = trigger.parentElement;
+          document.querySelectorAll('.submenu.open').forEach(x => { if (x !== li) x.classList.remove('open'); });
+          li.classList.toggle('open');
+        }
+      });
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.submenu-has-children > a'); if (!trigger) return;
+        if (mq.matches) {
+          e.preventDefault();
+          const li = trigger.parentElement;
+          li.classList.toggle('open');
+          const panel = li.querySelector('.subsubmenu-items');
+          if (panel) panel.style.display = (panel.style.display === 'block' ? 'none' : 'block');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

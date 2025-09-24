@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel de Usuario</title>
+  <style>
+    :root{
+      --bg:#fff0f5;
+      --card:#ffe4ec;
+      --text:#442a38;
+      --muted:#8b5f73;
+      --brand1:#ec4899;
+      --brand2:#f472b6;
+      --hover:rgba(236,72,153,.12);
+      --radius:14px;
+      --shadow:0 10px 30px rgba(0,0,0,.12);
+      --border:1px solid rgba(236,72,153,.2);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+
+    body{
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+
+    /* Layout fullscreen */
+    .user-grid{
+      display:grid;
+      grid-template-columns:260px 1fr;
+      height:100vh;
+    }
+    @media(max-width:780px){
+      .user-grid{ grid-template-columns:1fr; grid-template-rows:auto 1fr; }
+    }
+
+    /* Sidebar */
+    .user-sidebar{
+      background:var(--card);
+      padding:24px 16px;
+      display:flex; flex-direction:column; justify-content:space-between;
+      border-right:1px solid rgba(236,72,153,.2);
+    }
+    .user-sidebar h2{
+      margin-bottom:20px;
+      background:linear-gradient(90deg,var(--brand1),var(--brand2));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      font-size:1.3rem; font-weight:700; text-align:center;
+    }
+    .user-sidebar ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px; }
+    .user-sidebar a{
+      display:block; width:100%; text-decoration:none; text-align:center;
+      padding:12px 14px; border-radius:10px; font-weight:600; color:var(--text);
+      background:#fff; border:1px solid #f8c3d9; transition:.2s ease;
+    }
+    .user-sidebar a:hover{
+      background:linear-gradient(90deg,var(--brand1),var(--brand2)); color:#fff;
+      transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.15);
+    }
+    .back-btn{
+      background:linear-gradient(90deg,var(--brand1),var(--brand2))!important;
+      color:#fff!important; border:none!important;
+    }
+    .logout-btn{
+      margin-top:20px; width:100%; padding:12px; border:0; border-radius:10px; cursor:pointer;
+      font-weight:700; color:#fff; background:linear-gradient(90deg,var(--brand1),var(--brand2)); transition:.2s ease;
+    }
+    .logout-btn:hover{ filter:brightness(.95); transform:translateY(-2px); }
+
+    /* Main */
+    .user-main{
+      padding:30px; background:#fff; overflow-y:auto;
+    }
+
+    /* Título y mensaje mejorados */
+    .user-main h1{
+      font-size:2.2rem;
+      line-height:1.1;
+      margin-bottom:18px;
+      font-weight:800; text-align:center;
+      background:linear-gradient(90deg,var(--brand1),var(--brand2));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow:0 3px 10px rgba(236,72,153,.25);
+      letter-spacing:.3px;
+    }
+    .welcome-msg{
+      font-size:1.2rem; line-height:1.7; text-align:center; color:var(--text);
+      background:var(--card); padding:18px 20px; border-radius:var(--radius);
+      box-shadow:var(--shadow); border:var(--border); margin:0 auto 10px; max-width:920px;
+    }
+    .welcome-msg strong{ color:var(--brand1); }
+
+    /* Usuario con icono */
+    .user-info{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      margin:20px auto;
+      padding:16px 24px;
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      border:var(--border);
+      max-width:420px;
+    }
+    .user-info svg{
+      width:42px; height:42px;
+      fill:url(#grad);
+      flex-shrink:0;
+    }
+    .user-info span{
+      font-size:1.5rem;
+      font-weight:700;
+      background:linear-gradient(90deg,var(--brand1),var(--brand2));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+
+    .divider{
+      width:120px; height:6px; margin:14px auto 0; border-radius:999px;
+      background:linear-gradient(90deg,var(--brand1),var(--brand2));
+      opacity:.8;
+    }
+  </style>
+</head>
+<body>
+
+<div class="user-grid">
+
+  <!-- Sidebar -->
+  <aside class="user-sidebar">
+    <div>
+      <h2>Mi Cuenta</h2>
+      <ul>
+        <li><a href="index.html" class="back-btn">← Volver</a></li>
+        <li><a href="editar-direccion.html">Editar Dirección</a></li>
+        <li><a href="actualizarUsuario.html">Editar Datos de Login</a></li>
+        <li><a href="perfil.html">Modificar Datos de Perfil</a></li>
+      </ul>
+    </div>
+    <button class="logout-btn">Cerrar Sesión</button>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="user-main">
+    <h1>✨ Panel de Usuario ✨</h1>
+
+    <!-- Nombre de usuario con icono -->
+    <div class="user-info">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#f472b6;stop-opacity:1"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2V19.2c0-3.2-6.4-4.8-9.6-4.8z"/>
+      </svg>
+      <span id="username">Usuario</span>
+    </div>
+
+    <p class="welcome-msg">
+      Bienvenido a tu panel de usuario. <br>
+      Aquí puedes gestionar tu <strong>perfil</strong>, tu <strong>dirección</strong> y tus <strong>datos de inicio de sesión</strong>.
+    </p>
+    <div class="divider" aria-hidden="true"></div>
+  </main>
+
+</div>
+
+<script>
+  // Decodificar el token para obtener username
+  function parseJwt (token) {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const token = localStorage.getItem('jwtToken');
+  if (token) {
+    const payload = parseJwt(token);
+    if (payload && payload.sub) {
+      document.getElementById('username').textContent = payload.sub;
+    }
+  }
+
+  // Cerrar sesión
+  document.querySelector('.logout-btn').addEventListener('click', () => {
+    localStorage.removeItem('jwtToken');
+    window.location.href = 'login.html';
+  });
+</script>
+</body>
+</html>

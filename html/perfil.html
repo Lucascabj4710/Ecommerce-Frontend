@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil</title>
+    <link rel="stylesheet" href="../css/perfil.css">
+</head>
+<body>
+    <div class="page-container">
+        <a href="dashboard.html" class="back-btn">← Volver</a>
+
+        <div class="profile-container">
+            <h2>Mi Perfil</h2>
+            <form id="profileForm">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" required readonly>
+
+                <label for="lastName">Apellido:</label>
+                <input type="text" id="lastName" required readonly>
+
+                <label for="phoneNumber">Teléfono:</label>
+                <input type="text" id="phoneNumber" required readonly>
+
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" required readonly>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" required readonly>
+
+                <div class="action-buttons">
+                    <button type="button" id="editBtn">Modificar Datos</button>
+                    <button type="submit" id="saveBtn" style="display: none;">Guardar Cambios</button>
+                    <button type="button" id="cancelBtn" class="cancel-btn" style="display: none;">Cancelar</button>
+                </div>
+            </form>
+
+            <p id="message"></p>
+            <button id="logoutBtn" class="logout-btn">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <script src="../js/perfil.js" defer></script>
+</body>
+</html>
