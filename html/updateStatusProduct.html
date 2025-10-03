@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Control de Productos</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: center; }
+    th { background: #007bff; color: #fff; }
+    button { padding: 6px 12px; border: none; border-radius: 5px; cursor: pointer; color: #fff; font-weight: 600; }
+    button:hover { opacity: 0.85; }
+    .status-btn { background: #007bff; margin-right: 5px; }
+    .edit-btn { background: #28a745; }
+    .enabled { color: green; font-weight: bold; }
+    .disabled { color: red; font-weight: bold; }
+    .message { text-align: center; margin-top: 15px; font-weight: bold; }
+    .pagination { display:flex; justify-content:center; gap:10px; margin-top:15px; }
+    .pgbtn { padding:6px 12px; border-radius:5px; border:1px solid #ccc; cursor:pointer; }
+    .pgbtn:disabled { opacity:0.6; cursor:not-allowed; }
+  </style>
+</head>
+<body>
+  <h1>Control de Productos</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Nombre</th><th>Precio</th><th>Estado</th><th>Acción</th>
+      </tr>
+    </thead>
+    <tbody id="productsBody">
+      <tr><td colspan="5">Cargando productos...</td></tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button id="prev" class="pgbtn">Anterior</button>
+    <button id="next" class="pgbtn">Siguiente</button>
+  </div>
+
+  <div id="message" class="message"></div>
+
+  <script>
+    const API_BASE = "http://localhost:8080/products";
+    const productsBody = document.getElementById("productsBody");
+    const messageDiv = document.getElementById("message");
+    const prevBtn = document.getElementById("prev");
+    const nextBtn = document.getElementById("next");
+
+    let currentPage = 0;
+    let pageSize = 10;
+    let totalPages = 1;
+
+    async function loadProducts(){
+      try{
+        const params = new URLSearchParams({ page: currentPage, size: pageSize });
+        const res = await fetch(`${API_BASE}/getAll?${params.toString()}`);
+        if(!res.ok) throw new Error(`Error de red: ${res.status}`);
+        const data = await res.json();
+
+        productsBody.innerHTML = "";
+
+        if(!data.content || data.content.length===0){
+          productsBody.innerHTML = "<tr><td colspan='5'>No hay productos</td></tr>";
+          totalPages = data.totalPages ?? 1;
+          prevBtn.disabled = true;
+          nextBtn.disabled = true;
+          return;
+        }
+
+        data.content.forEach(p=>{
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${p.id}</td>
+            <td>${p.name}</td>
+            <td>$${p.price ?? 0}</td>
+            <td class="${p.isEnabled==='ENABLED'?'enabled':'disabled'}">${p.isEnabled}</td>
+            <td>
+              <button class="status-btn" onclick="updateStatus(${p.id})">Cambiar estado</button>
+              <button class="edit-btn" onclick="editarProducto('${encodeURIComponent(p.name)}')">Editar</button>
+            </td>
+          `;
+          productsBody.appendChild(tr);
+        });
+
+        totalPages = data.totalPages ?? 1;
+        prevBtn.disabled = data.first ?? (currentPage===0);
+        nextBtn.disabled = data.last ?? (currentPage>=totalPages-1);
+      }catch(e){
+        productsBody.innerHTML = `<tr><td colspan="5">❌ ${e.message}</td></tr>`;
+      }
+    }
+
+    async function updateStatus(id){
+      try{
+        const res = await fetch(`${API_BASE}/updateStatus/${id}`, { method: "POST" });
+        if(!res.ok) throw new Error("No se pudo actualizar el estado");
+        const data = await res.json();
+        messageDiv.style.color = "green";
+        messageDiv.textContent = "✅ Estado actualizado: " + JSON.stringify(data);
+        await loadProducts();
+      }catch(e){
+        messageDiv.style.color = "red";
+        messageDiv.textContent = "❌ " + e.message;
+      }
+    }
+
+    function editarProducto(name){
+      window.location.href = `updateProduct.html?name=${name}`;
+    }
+
+    // Paginación
+    prevBtn.addEventListener('click',()=>{ if(currentPage>0){ currentPage--; loadProducts(); } });
+    nextBtn.addEventListener('click',()=>{ if(currentPage<totalPages-1){ currentPage++; loadProducts(); } });
+
+    loadProducts();
+  </script>
+</body>
+</html>
