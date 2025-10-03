@@ -3,12 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Buscar links en el menú
   const iniciarSesion = Array.from(document.querySelectorAll('a[href="login.html"]'))
                              .find(a => a.textContent.trim() === "Iniciar sesión");
-  const registrarme = Array.from(document.querySelectorAll('a[href="login.html"]'))
+  const registrarme = Array.from(document.querySelectorAll('a[href="register.html"]'))
                            .find(a => a.textContent.trim() === "Registrarme");
   const panelAdmin = Array.from(document.querySelectorAll('a[href="admin.html"]'))
                           .find(a => a.textContent.trim() === "Panel de control ADMIN");
   const perfilUser = Array.from(document.querySelectorAll('a[href="dashboard.html"]'))
-                          .find(a => a.textContent.trim() === "Mi perfil"); // 👈 corregido
+                          .find(a => a.textContent.trim() === "Mi perfil");
   const logoutBtn = Array.from(document.querySelectorAll('a[href="logout.php"]'))
                          .find(a => a.textContent.trim() === "Cerrar sesión");
 
@@ -67,4 +67,3 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
-
