@@ -813,3 +813,298 @@ border-radius: 10px;
 }
 
 .btn-label{ position: relative; z-index: 3; }   /* <-- texto por encim*
+
+/* === Paradiise Pink Add-On (append-only) ================================ */
+:root{
+  --p-pink-700: #d81b60;
+  --p-pink-600: #e91e63;  /* principal */
+  --p-pink-500: #f06292;
+  --p-pink-200: #f8b6cc;
+  --p-pink-100: #ffd6e5;
+  --p-pink-50:  #fff0f6;
+  --p-ink-900:  #231f26;  /* texto principal oscuro */
+  --p-ink-700:  #3a313f;
+  --p-white:    #ffffff;
+}
+
+/* Header: mantener look pero pulir hover/focus con rosa */
+.navegacion-principal .menu > li > a{
+  transition: color .2s ease, background-color .2s ease;
+  border-radius: .6rem;
+}
+.navegacion-principal .menu > li > a:hover,
+.navegacion-principal .menu > li > a:focus-visible{
+  color: var(--p-pink-600) !important;
+  background: var(--p-pink-50);
+  outline: none;
+}
+
+/* Quita el azul bootstrap heredado en hover del menú */
+.navegacion-principal .menu a:hover{
+  color: var(--p-pink-600) !important;
+}
+
+/* Iconos caret/chevron al tono rosa */
+.navegacion-principal .menu i.fa-caret-down,
+.navegacion-principal .menu i.fa-chevron-right{
+  color: var(--p-pink-600);
+}
+
+/* Submenús: colores y hover suaves en rosa */
+.submenu-items,
+.subsubmenu-items{
+  background: var(--p-white);
+  border: 1px solid var(--p-pink-100);
+  border-radius: .6rem;
+  box-shadow: 0 10px 30px rgba(233,30,99,.10);
+}
+.submenu-items a,
+.subsubmenu-items a{
+  color: var(--p-ink-700);
+  transition: background-color .15s ease, color .15s ease, padding .15s ease;
+}
+.submenu-items a:hover,
+.submenu-items a:focus-visible,
+.subsubmenu-items a:hover,
+.subsubmenu-items a:focus-visible{
+  color: var(--p-pink-700);
+  background: var(--p-pink-50);
+  outline: none;
+  padding-left: 1.05rem;
+}
+
+/* Estado “abierto”: marcar el padre en rosa si el dropdown está visible */
+.submenu:hover > a,
+.submenu:focus-within > a,
+.submenu.open > a{
+  color: var(--p-pink-600) !important;
+  background: var(--p-pink-50);
+  border-radius: .6rem;
+}
+
+/* Estado “activo”/página actual (si usás .active o aria-current) */
+.navegacion-principal a.active,
+.navegacion-principal a[aria-current="page"]{
+  color: var(--p-white) !important;
+  background: var(--p-pink-600) !important;
+  border-radius: .6rem;
+}
+
+/* Accesibilidad: contorno visible acorde a la paleta */
+.navegacion-principal a:focus-visible{
+  box-shadow: 0 0 0 3px var(--p-pink-200);
+}
+
+/* Carrito al tono (ligero ajuste de tinte) */
+.carrito a img{
+  filter: hue-rotate(320deg) saturate(1) brightness(1);
+}
+
+/* Footer enlaces hover al rosa */
+.footer-flex-enlaces a:hover,
+.footer-flex-enlaces a:focus-visible{
+  color: var(--p-pink-700) !important;
+  background: var(--p-pink-50);
+  outline: none;
+  border-radius: .5rem;
+}
+
+/* === Center header menu + keep cart on the right (append-only) === */
+.navegacion-principal{
+  position: relative; /* para posicionar el carrito */
+}
+
+/* Centrar el listado principal */
+.menu{
+  width: 100%;
+  justify-content: center;   /* centra los <li> del menú */
+  gap: .8rem;                /* un poquito más de aire entre items */
+}
+
+/* Mandar el carrito a la derecha sin afectar el centrado */
+.menu .carrito{
+  position: absolute;
+  right: clamp(8px, 2vw, 18px);
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0; /* por si había márgenes previos */
+}
+
+/* Mejorar clicabilidad de top-level (no cambia tu tipografía) */
+.navegacion-principal .menu > li > a{
+  padding: .6rem .9rem;      /* un toque más de padding horizontal */
+  border-radius: .6rem;
+}
+
+/* ——— Responsivo: en móvil el carrito vuelve al flujo ——— */
+@media (max-width: 900px){
+  .menu{
+    justify-content: flex-start; /* comportamiento anterior en mobile */
+  }
+  .menu .carrito{
+    position: static;
+    transform: none;
+    order: 99;           /* ya lo usás, lo mantenemos abajo/derecha */
+    margin-left: 0;
+    margin-top: .5rem;
+  }
+}
+
+/* === Paradiise: hover sin fondo blanco (append-only) =================== */
+:root{
+  /* fallback por si no estaban definidos */
+  --p-pink-700: #d81b60;
+  --p-pink-600: #e91e63;
+  --p-pink-200: #f8b6cc;
+  --p-pink-100: #ffd6e5;
+  --p-pink-50:  #fff0f6;
+}
+
+/* Top-level: sin “parche” blanco; usamos subrayado y leve tint */
+.navegacion-principal .menu > li > a:hover,
+.navegacion-principal .menu > li > a:focus-visible{
+  background: transparent !important;              /* NO fondo blanco */
+  color: var(--p-pink-600) !important;
+  box-shadow: inset 0 -2px 0 0 var(--p-pink-600);  /* subrayado rosa */
+  outline: none;
+}
+
+/* Cuando el submenu está abierto, leve tint rosado (no blanco) */
+.submenu:hover > a,
+.submenu:focus-within > a,
+.submenu.open > a{
+  background: rgba(233, 30, 99, .08) !important;   /* rosa translúcido */
+  color: var(--p-pink-600) !important;
+  box-shadow: none;
+  border-radius: .6rem;
+}
+
+/* Submenús: hover con rosa suave en lugar de gris/blanco */
+.submenu-items a:hover,
+.submenu-items a:focus-visible,
+.subsubmenu-items a:hover,
+.subsubmenu-items a:focus-visible{
+  background: rgba(233, 30, 99, .12) !important;   /* reemplaza gris */
+  color: var(--p-pink-700) !important;
+  outline: none;
+}
+
+/* Si querés que TODO el panel del dropdown tenga un tinte rosado sutil: */
+.submenu-items,
+.subsubmenu-items{
+  background: linear-gradient(0deg, rgba(233,30,99,.04), rgba(233,30,99,.04)) !important;
+  border: 1px solid var(--p-pink-100);
+  box-shadow: 0 10px 30px rgba(233,30,99,.10);
+}
+
+/* Quitar cualquier color azul heredado en hovers previos */
+.navegacion-principal .menu a:hover{
+  color: var(--p-pink-600) !important;
+}
+
+/* === Paradiise: menos transparencia, más sólido (append-only) ======== */
+
+/* Top-level: hover/focus bien visible en rosa claro, sin transparencia */
+.navegacion-principal .menu > li > a:hover,
+.navegacion-principal .menu > li > a:focus-visible{
+  background: var(--p-pink-100) !important;   /* sólido */
+  color: var(--p-pink-700) !important;
+  box-shadow: none;                            /* quitamos subrayado */
+  outline: none;
+}
+
+/* Estado “abierto” del padre: rosa claro sólido */
+.submenu:hover > a,
+.submenu:focus-within > a,
+.submenu.open > a{
+  background: var(--p-pink-100) !important;   /* sólido */
+  color: var(--p-pink-600) !important;
+  box-shadow: none;
+  border-radius: .6rem;
+}
+
+/* Paneles de dropdown: fondo sólido (no translúcido) y borde más marcado */
+.submenu-items,
+.subsubmenu-items{
+  background: #fff !important;                 /* panel blanco sólido */
+  border: 1px solid var(--p-pink-200) !important;
+  box-shadow: 0 10px 30px rgba(233,30,99,.12);
+}
+
+/* Hover de items: rosa sólido suave y texto con buen contraste */
+.submenu-items a:hover,
+.submenu-items a:focus-visible,
+.subsubmenu-items a:hover,
+.subsubmenu-items a:focus-visible{
+  background: var(--p-pink-100) !important;   /* sólido */
+  color: var(--p-ink-900) !important;         /* más contraste que el 700 */
+  outline: none;
+  padding-left: 1.05rem;
+}
+
+/* Ajuste fino: color por defecto de items del dropdown un poco más oscuro */
+.submenu-items a,
+.subsubmenu-items a{
+  color: var(--p-ink-700) !important;
+}
+
+/* Quitar cualquier override azul heredado */
+.navegacion-principal .menu a:hover{
+  color: var(--p-pink-600) !important;
+}
+
+/* === Paradiise: texto rosa + movimiento, SIN sombreado de fondo ======= */
+
+/* Top-level (Inicio, Productos, Contacto, Cuenta, etc.) */
+.navegacion-principal .menu > li > a{
+  transition: color .2s ease, transform .18s ease; /* movimiento suave */
+}
+.navegacion-principal .menu > li > a:hover,
+.navegacion-principal .menu > li > a:focus-visible{
+  color: var(--p-pink-600) !important;   /* texto rosa */
+  background: transparent !important;    /* sin fondo/tinte */
+  box-shadow: none !important;           /* sin sombra/subrayado */
+  transform: translateY(-1px) scale(1.03); /* leve movimiento */
+  outline: none;
+}
+
+/* Padre con submenú “abierto”: SIN fondo ni sombra, solo color */
+.submenu:hover > a,
+.submenu:focus-within > a,
+.submenu.open > a{
+  color: var(--p-pink-600) !important;   /* texto rosa */
+  background: transparent !important;    /* sin fondo/tinte */
+  box-shadow: none !important;           /* sin sombra */
+  transform: translateY(-1px) scale(1.03);
+}
+
+/* Items dentro de los submenús: SIN fondo, con leve desplazamiento */
+.submenu-items a,
+.subsubmenu-items a{
+  transition: color .15s ease, padding .15s ease, transform .15s ease;
+}
+.submenu-items a:hover,
+.submenu-items a:focus-visible,
+.subsubmenu-items a:hover,
+.subsubmenu-items a:focus-visible{
+  color: var(--p-pink-700) !important;   /* texto rosa más intenso */
+  background: transparent !important;    /* sin fondo/tinte */
+  box-shadow: none !important;           /* sin sombra */
+  padding-left: 1.05rem;                 /* micro “deslizamiento” */
+  transform: translateX(1px);
+  outline: none;
+}
+
+/* Paneles del dropdown: sin sombras (por las dudas) */
+.submenu-items,
+.subsubmenu-items{
+  box-shadow: none !important;           /* sin sombra de panel */
+}
+
+/* Cualquier override azul previo de hover */
+.navegacion-principal .menu a:hover{
+  color: var(--p-pink-600) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
