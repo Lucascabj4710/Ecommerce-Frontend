@@ -60,9 +60,7 @@
 
     .field{ margin-bottom: 14px; }
     .field label{ display:block; font-weight:700; margin-bottom:6px; color:#4b2b39; }
-    .control{
-      position: relative;
-    }
+    .control{ position: relative; }
     input[type="password"]{
       width:100%; padding: 12px 42px 12px 14px; border-radius: 12px;
       border: 1.6px solid rgba(236,72,153,.25); background:#fff; color:var(--text); font-size:1rem;
@@ -74,13 +72,8 @@
       width:34px; height:34px; border-radius:50%; display:grid; place-items:center;
       cursor:pointer; color:#7a5166;
     }
-    .meter{
-      height:8px; border-radius:999px; background:#f3d7e7; overflow:hidden; margin-top:6px;
-    }
-    .meter > span{
-      display:block; height:100%; width:0%; background:linear-gradient(90deg,#f87171,#f59e0b,#10b981);
-      transition: width .25s ease;
-    }
+    .meter{ height:8px; border-radius:999px; background:#f3d7e7; overflow:hidden; margin-top:6px; }
+    .meter > span{ display:block; height:100%; width:0%; background:linear-gradient(90deg,#f87171,#f59e0b,#10b981); transition: width .25s ease; }
 
     .actions{ margin-top: 12px; display:flex; gap: 10px; }
     .btn-primary{
@@ -98,7 +91,74 @@
 </head>
 <body>
 
+  <!-- HEADER REPLICADO DEL INDEX -->
+  <header>
+    <div class="hero">
+      <nav id="navbar" class="navegacion-principal contenedor">
+        <ul class="menu">
+          <li><a href="index.html">Inicio</a></li>
 
+          <li class="submenu">
+            <a href="getProducts.html">Productos <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=anillo">Anillos <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=anillo&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=pulsera">Pulseras <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=pulsera&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=collar">Collares <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=collar&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=collar&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li><a href="getProducts.html?q=relojes">Relojes</a></li>
+              <li><a href="getProducts.html?q=carteras">Carteras</a></li>
+            </ul>
+          </li>
+
+          <li><a href="contacto.html">Contacto</a></li>
+
+          <li class="submenu">
+            <a href="#">Cuenta <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <li><a href="login.html">Iniciar sesión</a></li>
+              <li><a href="register.html">Registrarme</a></li>
+              <li><a href="admin.html">Panel de control ADMIN</a></li>
+              <li><a href="dashboard.html">Mi perfil</a></li>
+              <li><a href="logout.php">Cerrar sesión</a></li>
+            </ul>
+          </li>
+
+          <li class="carrito">
+            <a href="carrito.html" aria-label="Carrito">
+              <img src="../imagenes/carrito2.png" alt="Carrito" width="32" height="32" />
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- FIN HEADER -->
 
   <main>
     <div class="wrap">
@@ -153,14 +213,12 @@
       const token = localStorage.getItem("jwtToken");
       if(!token){ window.location.replace("login.html"); return; }
 
-      // decodificar payload del token
       function parseJwt (t) {
         try { return JSON.parse(atob(t.split('.')[1])); }
         catch(e){ return null; }
       }
       const payload = parseJwt(token);
 
-      // mostrar/ocultar
       document.querySelectorAll(".toggle").forEach(btn=>{
         btn.addEventListener("click", ()=>{
           const id = btn.dataset.target;
@@ -171,7 +229,6 @@
         });
       });
 
-      // medidor simple de fortaleza
       function strength(s){
         let score = 0;
         if(s.length >= 8) score++;
@@ -223,7 +280,7 @@
               "Authorization": "Bearer " + token
             },
             body: JSON.stringify({ 
-              username: payload?.sub || "",  // se inserta el username del token
+              username: payload?.sub || "",  
               password: p 
             })
           });

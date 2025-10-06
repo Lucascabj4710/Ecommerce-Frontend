@@ -25,7 +25,7 @@
     *{box-sizing:border-box}
 
     body{
-      margin:0; padding:25px;
+      margin:0; padding:25px 25px 40px;
       font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
       color:var(--text-dark);
       background-image: linear-gradient(170deg, var(--bg-light) 0%, var(--bg-gradient-end) 100%);
@@ -69,7 +69,7 @@
     /* Toolbar de filtros */
     .toolbar{
       display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;
-      background:#fff; border:1px solid var(--border-light);
+      background:#fff; border:1.5px solid var(--border-light);
       padding:10px; border-radius:16px; box-shadow:0 4px 15px var(--shadow-light);
       margin-bottom:18px;
     }
@@ -88,7 +88,7 @@
       box-shadow: 0 0 0 4px var(--focus-ring);
     }
     .meta-chip{
-      background:#fff; border:1px solid var(--border-light);
+      background:#fff; border:1.5px solid var(--border-light);
       border-radius:999px; padding:8px 12px; color:var(--text-muted);
       box-shadow:0 1px 2px var(--shadow-light);
       font-size:.95rem;
@@ -103,7 +103,7 @@
     .card{
       background:var(--card-bg); border-radius:var(--radius-large);
       overflow:hidden;
-      box-shadow:0 4px 15px var(--shadow-light); border:1px solid var(--border-light);
+      box-shadow:0 4px 15px var(--shadow-light); border:1.5px solid var(--border-light);
       display:flex; flex-direction:column;
       transition:transform var(--transition-ease), box-shadow var(--transition-ease);
     }
@@ -149,6 +149,76 @@
 </head>
 <body>
 
+  <!-- ===== HEADER (igual al index que aprobaste) ===== -->
+  <header>
+    <div class="hero">
+      <nav id="navbar" class="navegacion-principal contenedor">
+        <ul class="menu">
+          <li><a href="index.html">Inicio</a></li>
+
+          <li class="submenu">
+            <a href="getProducts.html">Productos <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <!-- Categorías principales -->
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=anillo">Anillos <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=anillo&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=pulsera">Pulseras <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=pulsera&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=collar">Collares <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=collar&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=collar&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <!-- Otras secciones -->
+              <li><a href="getProducts.html?q=relojes">Relojes</a></li>
+              <li><a href="getProducts.html?q=carteras">Carteras</a></li>
+            </ul>
+          </li>
+
+          <li><a href="contacto.html">Contacto</a></li>
+
+          <li class="submenu">
+            <a href="#">Cuenta <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <li><a href="login.html">Iniciar sesión</a></li>
+              <li><a href="register.html">Registrarme</a></li>
+              <li><a href="admin.html">Panel de control ADMIN</a></li>
+              <li><a href="dashboard.html">Mi perfil</a></li>
+              <li><a href="logout.php">Cerrar sesión</a></li>
+            </ul>
+          </li>
+
+          <li class="carrito">
+            <a href="carrito.html" aria-label="Carrito">
+              <img src="../imagenes/carrito2.png" alt="Carrito" width="32" height="32" />
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- ===== /HEADER ===== -->
 
   <div class="wrapper">
     <div class="page-head">

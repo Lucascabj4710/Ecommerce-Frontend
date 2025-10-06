@@ -5,119 +5,211 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Página Principal - Paradiise</title>
-  
-  <!-- Bootstrap CSS CDN -->
-   <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-      integrity="sha512-..."
-      crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- Bootstrap / Iconos / Estilos -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="../css/normalize.css" />
   <link rel="stylesheet" href="../css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Fix del botón Inicio en footer -->
+  <style>
+    /* Botón destacado "Inicio" en el footer */
+    .footer-flex-enlaces .link-inicio{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      background:linear-gradient(90deg,#ec4899,#f472b6);
+      color:#fff !important;
+      text-shadow:none;
+      font-weight:800;
+      border:1px solid rgba(236,72,153,.25);
+      box-shadow:0 8px 22px rgba(236,72,153,.28);
+      transform:translateY(0);
+      transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;
+    }
+    .footer-flex-enlaces .link-inicio:hover,
+    .footer-flex-enlaces .link-inicio:focus-visible{
+      filter:brightness(.97);
+      transform:translateY(-2px);
+      box-shadow:0 12px 28px rgba(236,72,153,.35);
+      outline:none;
+    }
+    /* Enlaces restantes más discretos sobre fondo oscuro */
+    .footer-flex-enlaces a:not(.link-inicio){
+      color:#f8b6cc;
+      text-shadow:none;
+      transition:color .2s ease;
+    }
+    .footer-flex-enlaces a:not(.link-inicio):hover,
+    .footer-flex-enlaces a:not(.link-inicio):focus-visible{
+      color:#ffd6e5;
+      outline:none;
+    }
+  </style>
 </head>
+<body>
 
+  <!-- HEADER (unificado) -->
+  <header>
+    <div class="hero">
+      <nav id="navbar" class="navegacion-principal contenedor">
+        <ul class="menu">
+          <!-- En subpáginas: Inicio apunta al index -->
+          <li><a href="../index.html">Inicio</a></li>
 
+          <li class="submenu">
+            <a href="getProducts.html">Productos <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <!-- Joyas por categoría -->
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=anillo">Anillos <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=anillo&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
 
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=pulsera">Pulseras <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=pulsera&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=collar">Collares <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=collar&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=collar&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <!-- Otras secciones -->
+              <li><a href="getProducts.html?q=relojes">Relojes</a></li>
+              <li><a href="getProducts.html?q=carteras">Carteras</a></li>
+            </ul>
+          </li>
+
+          <li><a href="contacto.html">Contacto</a></li>
+
+          <li class="submenu">
+            <a href="#">Cuenta <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <li><a href="login.html">Iniciar sesión</a></li>
+              <li><a href="register.html">Registrarme</a></li>
+              <li><a href="admin.html">Panel de control ADMIN</a></li>
+              <li><a href="dashboard.html">Mi perfil</a></li>
+              <li><a href="logout.php">Cerrar sesión</a></li>
+            </ul>
+          </li>
+
+          <li class="carrito">
+            <a href="carrito.html" aria-label="Carrito">
+              <img src="../imagenes/carrito2.png" alt="Carrito" width="32" height="32" />
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
   <main class="imagenes contenedor">
-      <div class="text-center">
-        <h1 class="satisfy-regular">Bienvenido a Paradiise</h1>
-        <marquee class="text-marquee" behavior="scroll" direction="left" scrollamount="5"><p>Aquí puedes navegar por nuestras secciones y descubrir nuestros productos.</p></marquee>
+    <div class="text-center">
+      <h1 class="satisfy-regular">Bienvenido a Paradiise</h1>
+      <marquee class="text-marquee" behavior="scroll" direction="left" scrollamount="5">
+        <p>Aquí puedes navegar por nuestras secciones y descubrir nuestros productos.</p>
+      </marquee>
+    </div>
+
+    <div class="img-flex">
+      <div class="img-estilo">
+        <a href="../imagenes/cartera1.jpg">
+          <img src="../imagenes/cartera1.jpg" class="card-img-top" alt="Cartera 1">
+        </a>
       </div>
-
-      <div class="img-flex">
-        <div class="img-estilo">
-          <a href="../imagenes/cartera1.jpg">
-            <img src="../imagenes/cartera1.jpg" class="card-img-top" alt="Cadenita de oro">
-          </a>
-        </div>
-        
-        <div class="img-estilo">
-          <img src="../imagenes/cartera2.jpg" class="card-img-top" alt="Aritos plata 925">              
-        </div>  
-
-        <div class="img-estilo">
-          <img src="../imagenes/cartera3.jpg" class="card-img-top" alt="Aritos plata 925">
-        </div>
-
-        <div class="img-estilo">
-          <img src="../imagenes/cartera4.jpg" class="card-img-top" alt="Cadenita de oro"> 
-        </div>
-        <div class="img-estilo">
-          <img src="../imagenes/cartera5.jpg" class="card-img-top" alt="Aritos plata 925">
-        </div>
-        <div class="img-estilo">
-          <img src="../imagenes/cartera6.jpg" class="card-img-top" alt="Aritos plata 925">
-        </div>
-        <div class="img-estilo">
-          <img src="../imagenes/cartera7.jpg" class="card-img-top" alt="Cadenita de oro">
-        </div>
-        <div class="img-estilo">
-          <img src="../imagenes/cartera8.jpg" class="card-img-top" alt="Aritos plata 925">
-        </div>
-        <div class="img-estilo">
-          <img src="../imagenes/cartera9.jpg" class="card-img-top" alt="Aritos plata 925">
-        </div>
-        <div class="img-estilo">
-          <img src="../imagenes/cartera10.jpg" class="card-img-top" alt="Cadenita de oro">
-        </div>
-        <div class="img-estilo">
-          <img src="../imagenes/cartera11.jpg" class="card-img-top" alt="Aritos plata 925">
-        </div>
-        <div class="img-estilo">
-          <img src="../imagenes/cartera12.jpg" class="card-img-top" alt="Aritos plata 925">
-        </div>
-        <div class="img-estilo">
-          <img src="../imagenes/cartera13.jpg" class="card-img-top" alt="Cadenita de oro">
-        </div>
-        <div class="img-estilo">
-          <img src="../imagenes/cartera14.jpg" class="card-img-top" alt="Cadenita de oro">
-        </div>
-      </div>
+      <div class="img-estilo"><img src="../imagenes/cartera2.jpg" class="card-img-top" alt="Cartera 2"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera3.jpg" class="card-img-top" alt="Cartera 3"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera4.jpg" class="card-img-top" alt="Cartera 4"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera5.jpg" class="card-img-top" alt="Cartera 5"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera6.jpg" class="card-img-top" alt="Cartera 6"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera7.jpg" class="card-img-top" alt="Cartera 7"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera8.jpg" class="card-img-top" alt="Cartera 8"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera9.jpg" class="card-img-top" alt="Cartera 9"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera10.jpg" class="card-img-top" alt="Cartera 10"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera11.jpg" class="card-img-top" alt="Cartera 11"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera12.jpg" class="card-img-top" alt="Cartera 12"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera13.jpg" class="card-img-top" alt="Cartera 13"></div>
+      <div class="img-estilo"><img src="../imagenes/cartera14.jpg" class="card-img-top" alt="Cartera 14"></div>
+    </div>
   </main>
 
+  <!-- FOOTER -->
   <section>
     <footer class="formato-footer">
       <div class="footer-flex-general contenedor">
         <div class="footer-flex-iconos">
           <ul class="rrss">
-            <li>
-              <a href="https://wa.me/5491122334455" target="_blank" aria-label="WhatsApp">
-                <i class="fa-brands fa-whatsapp"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://facebook.com/tupagina" target="_blank" aria-label="Facebook">
-                <i class="fa-brands fa-facebook-f"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://instagram.com/tuusuario" target="_blank" aria-label="Instagram">
-                <i class="fa-brands fa-instagram"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://tiktok.com/@tuusuario" target="_blank" aria-label="TikTok">
-                <i class="fa-brands fa-tiktok"></i>
-              </a>
-            </li>
+            <li><a href="https://wa.me/5491122334455" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></li>
+            <li><a href="https://facebook.com/tupagina" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+            <li><a href="https://instagram.com/tuusuario" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+            <li><a href="https://tiktok.com/@tuusuario" target="_blank" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a></li>
           </ul>
         </div>
         <div class="footer-flex-enlaces">
-          <a href="">Inicio</a>
-          <a href="">Productos</a>
-          <a href="">Nuestras Joyas</a>
-          <a href="">Contacto</a>
-          <a href="">Cuenta</a>
+          <a href="../index.html" class="link-inicio">Inicio</a>
+          <a href="getProducts.html">Productos</a>
+          <a href="contacto.html">Contacto</a>
+          <a href="login.html">Cuenta</a>
         </div>
       </div>
       <div>
         <p class="derechos_reservados">Todos los derechos reservados Paradiise</p>
       </div>
-  </footer>
+    </footer>
   </section>
 
-  <!-- Bootstrap JS y Popper.js CDN -->
+  <!-- JS: menú responsive por click en mobile -->
+  <script>
+    (function () {
+      const mq = window.matchMedia('(max-width: 900px)');
+      // Nivel 1 (Productos / Cuenta)
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.submenu > a');
+        if (!trigger) return;
+        if (mq.matches) {
+          e.preventDefault();
+          const li = trigger.parentElement;
+          document.querySelectorAll('.submenu.open').forEach(x => { if (x !== li) x.classList.remove('open'); });
+          li.classList.toggle('open');
+        }
+      });
+      // Nivel 2 (Joyas -> categorías)
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.submenu-has-children > a');
+        if (!trigger) return;
+        if (mq.matches) {
+          e.preventDefault();
+          const li = trigger.parentElement;
+          li.classList.toggle('open');
+          const panel = li.querySelector('.subsubmenu-items');
+          if (panel) panel.style.display = (panel.style.display === 'block' ? 'none' : 'block');
+        }
+      });
+    })();
+  </script>
+
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>

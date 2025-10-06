@@ -86,6 +86,77 @@
 </head>
 <body>
 
+  <!-- ===== HEADER (igual al index) ===== -->
+  <header>
+    <div class="hero">
+      <nav id="navbar" class="navegacion-principal contenedor">
+        <ul class="menu">
+          <li><a href="index.html">Inicio</a></li>
+
+          <li class="submenu">
+            <a href="getProducts.html">Productos <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <!-- Categorías principales -->
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=anillo">Anillos <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=anillo&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=pulsera">Pulseras <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=pulsera&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=collar">Collares <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=collar&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=collar&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <!-- Otras secciones -->
+              <li><a href="getProducts.html?q=relojes">Relojes</a></li>
+              <li><a href="getProducts.html?q=carteras">Carteras</a></li>
+            </ul>
+          </li>
+
+          <li><a href="contacto.html">Contacto</a></li>
+
+          <li class="submenu">
+            <a href="#">Cuenta <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <li><a href="login.html">Iniciar sesión</a></li>
+              <li><a href="register.html">Registrarme</a></li>
+              <li><a href="admin.html">Panel de control ADMIN</a></li>
+              <li><a href="dashboard.html">Mi perfil</a></li>
+              <li><a href="logout.php">Cerrar sesión</a></li>
+            </ul>
+          </li>
+
+          <li class="carrito">
+            <a href="carrito.html" aria-label="Carrito">
+              <img src="../imagenes/carrito2.png" alt="Carrito" width="32" height="32" />
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- ===== /HEADER ===== -->
+
   <div id="loading">Cargando producto...</div>
 
   <div id="detail" class="container" style="display:none;">
@@ -138,111 +209,103 @@
     }
 
     async function tryCreateCartDetail(payload){
-  const token = localStorage.getItem('jwtToken');
-  const res = await fetch('http://localhost:8080/cartDetail/create', {
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'Authorization': token ? `Bearer ${token}` : ''
-    },
-    body: JSON.stringify(payload)
-  });
+      const token = localStorage.getItem('jwtToken');
+      const res = await fetch('http://localhost:8080/cartDetail/create', {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
+        },
+        body: JSON.stringify(payload)
+      });
 
-  // parseo flexible del body (json o text)
-  let body = null;
-  const contentType = res.headers.get('content-type') || '';
-  try {
-    if (contentType.includes('application/json')) {
-      body = await res.json();
-    } else {
-      body = await res.text();
+      let body = null;
+      const contentType = res.headers.get('content-type') || '';
+      try {
+        if (contentType.includes('application/json')) {
+          body = await res.json();
+        } else {
+          body = await res.text();
+        }
+      } catch (e) {
+        try { body = await res.text(); } catch { body = null; }
+      }
+
+      let errText = '';
+      if (!res.ok) {
+        if (!body) {
+          errText = `HTTP ${res.status}`;
+        } else if (typeof body === 'string') {
+          errText = body;
+        } else if (body.message) {
+          errText = body.message;
+        } else if (body.errors) {
+          if (Array.isArray(body.errors)) errText = body.errors.join(' | ');
+          else errText = JSON.stringify(body.errors);
+        } else {
+          errText = JSON.stringify(body);
+        }
+      }
+      return { ok: res.ok, status: res.status, errText, body };
     }
-  } catch (e) {
-    try { body = await res.text(); } catch { body = null; }
-  }
 
-  // construyo errText de forma segura
-  let errText = '';
-  if (!res.ok) {
-    if (!body) {
-      errText = `HTTP ${res.status}`;
-    } else if (typeof body === 'string') {
-      errText = body;
-    } else if (body.message) {
-      errText = body.message;
-    } else if (body.errors) {
-      // body.errors puede ser array o mapa
-      if (Array.isArray(body.errors)) errText = body.errors.join(' | ');
-      else errText = JSON.stringify(body.errors);
-    } else {
-      errText = JSON.stringify(body);
-    }
-  }
-
-  // devuelvo también status y body para debug
-  return { ok: res.ok, status: res.status, errText, body };
-}
-
-async function addToCart() {
-  const qty = Math.max(1, Number(document.getElementById('quantity').value));
-  if (!currentProductId || qty < 1) { 
-    showToast('Producto o cantidad inválida', 'error'); 
-    return; 
-  }
-
-  const token = localStorage.getItem('jwtToken');
-  if (!token) { 
-    showToast('Debes iniciar sesión para agregar productos', 'error'); 
-    setTimeout(() => location.href = 'login.html', 1200); 
-    return; 
-  }
-
-  const buyBtn = document.getElementById('buy-btn');
-  const spinner = document.getElementById('buy-spinner');
-  buyBtn.disabled = true; 
-  spinner.className = 'btn-spinner';
-
-  const candidates = [
-    { product: currentProductId, quantity: qty },
-    { productId: currentProductId, quantity: qty },
-    { idProduct: currentProductId, quantity: qty },
-    { productName: currentProductName, quantity: qty }
-  ];
-
-  let lastErr = '';
-  for (const body of candidates) {
-    try {
-      const result = await tryCreateCartDetail(body);
-      console.debug('addToCart attempt', body, 'status', result.status, 'ok', result.ok, 'body', result.body);
-
-      if (result.ok) {
-        showToast('Producto agregado al carrito!');
-        buyBtn.disabled = false; 
-        spinner.className = '';
+    async function addToCart() {
+      const qty = Math.max(1, Number(document.getElementById('quantity').value));
+      if (!currentProductId || qty < 1) {
+        showToast('Producto o cantidad inválida', 'error');
         return;
       }
 
-      // Mostrar el mensaje exacto del backend para cualquier error
-      if (!result.ok) {
-        showToast(result.errText || 'Error desconocido', 'error');
-        buyBtn.disabled = false;
-        spinner.className = '';
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        showToast('Debes iniciar sesión para agregar productos', 'error');
+        setTimeout(() => location.href = 'login.html', 1200);
         return;
       }
 
-    } catch (e) {
-      lastErr = e.message || 'Error de red';
-      console.error('addToCart exception', e);
+      const buyBtn = document.getElementById('buy-btn');
+      const spinner = document.getElementById('buy-spinner');
+      buyBtn.disabled = true;
+      spinner.className = 'btn-spinner';
+
+      const candidates = [
+        { product: currentProductId, quantity: qty },
+        { productId: currentProductId, quantity: qty },
+        { idProduct: currentProductId, quantity: qty },
+        { productName: currentProductName, quantity: qty }
+      ];
+
+      let lastErr = '';
+      for (const body of candidates) {
+        try {
+          const result = await tryCreateCartDetail(body);
+          console.debug('addToCart attempt', body, 'status', result.status, 'ok', result.ok, 'body', result.body);
+
+          if (result.ok) {
+            showToast('Producto agregado al carrito!');
+            buyBtn.disabled = false;
+            spinner.className = '';
+            return;
+          }
+
+          // si falla, mostrar mensaje del backend y cortar
+          if (!result.ok) {
+            showToast(result.errText || 'Error desconocido', 'error');
+            buyBtn.disabled = false;
+            spinner.className = '';
+            return;
+          }
+
+        } catch (e) {
+          lastErr = e.message || 'Error de red';
+          console.error('addToCart exception', e);
+        }
+      }
+
+      showToast('Error: ' + lastErr, 'error');
+      buyBtn.disabled = false;
+      spinner.className = '';
     }
-  }
-
-  showToast('Error: ' + lastErr, 'error');
-  buyBtn.disabled = false; 
-  spinner.className = '';
-}
-
-
-
 
     window.addEventListener('DOMContentLoaded', async ()=>{
       const id = getQueryParam('id');

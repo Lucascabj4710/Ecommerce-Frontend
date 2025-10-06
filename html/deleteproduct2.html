@@ -128,7 +128,76 @@
 </head>
 <body>
 
+  <!-- ===== HEADER (idéntico al index) ===== -->
+  <header>
+    <div class="hero">
+      <nav id="navbar" class="navegacion-principal contenedor">
+        <ul class="menu">
+          <li><a href="index.html">Inicio</a></li>
 
+          <li class="submenu">
+            <a href="getProducts.html">Productos <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <!-- Categorías principales -->
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=anillo">Anillos <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=anillo&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=pulsera">Pulseras <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=pulsera&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=collar">Collares <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=collar&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=collar&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <!-- Otras secciones -->
+              <li><a href="getProducts.html?q=relojes">Relojes</a></li>
+              <li><a href="getProducts.html?q=carteras">Carteras</a></li>
+            </ul>
+          </li>
+
+          <li><a href="contacto.html">Contacto</a></li>
+
+          <li class="submenu">
+            <a href="#">Cuenta <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <li><a href="login.html">Iniciar sesión</a></li>
+              <li><a href="register.html">Registrarme</a></li>
+              <li><a href="admin.html">Panel de control ADMIN</a></li>
+              <li><a href="dashboard.html">Mi perfil</a></li>
+              <li><a href="logout.php">Cerrar sesión</a></li>
+            </ul>
+          </li>
+
+          <li class="carrito">
+            <a href="carrito.html" aria-label="Carrito">
+              <img src="../imagenes/carrito2.png" alt="Carrito" width="32" height="32" />
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- ===== /HEADER ===== -->
 
   <main>
     <div class="wrap">
@@ -161,6 +230,36 @@
       </div>
     </div>
   </div>
+
+  <!-- JS menú responsive (igual que en index, inline) -->
+  <script>
+    (function () {
+      const mq = window.matchMedia('(max-width: 900px)');
+      // Nivel 1 (Productos / Cuenta)
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.submenu > a');
+        if (!trigger) return;
+        if (mq.matches) {
+          e.preventDefault();
+          const li = trigger.parentElement;
+          document.querySelectorAll('.submenu.open').forEach(x => { if (x !== li) x.classList.remove('open'); });
+          li.classList.toggle('open');
+        }
+      });
+      // Nivel 2 (sub-submenús)
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.submenu-has-children > a');
+        if (!trigger) return;
+        if (mq.matches) {
+          e.preventDefault();
+          const li = trigger.parentElement;
+          li.classList.toggle('open');
+          const panel = li.querySelector('.subsubmenu-items');
+          if (panel) panel.style.display = (panel.style.display === 'block' ? 'none' : 'block');
+        }
+      });
+    })();
+  </script>
 
   <script>
     (function(){
@@ -211,8 +310,8 @@
           }
           function onOk(){ close(true); }
           function onCancel(){ close(false); }
-          cmOk.addEventListener('click', onOk);
-          cmCancel.addEventListener('click', onCancel);
+          cmOk.addEventListener('click', onOk, { once:true });
+          cmCancel.addEventListener('click', onCancel, { once:true });
           modal.addEventListener('click', e=>{ if(e.target === modal) close(false); }, { once:true });
         });
       }
@@ -230,7 +329,7 @@
         const img = card.querySelector('img');
         img.addEventListener('error', ()=>fallbackImg(img));
 
-        const btn = card.querySelector('.delete-btn');
+        const btn = card.querySelector('button.delete-btn');
         btn.addEventListener('click', async ()=>{
           const ok = await confirmDialog(`¿Eliminar “${p.name}”?`);
           if(!ok) return;
@@ -238,8 +337,6 @@
             const res = await authFetch(`${API}/products/delete/${p.id}`, { method:'DELETE' });
             if(!res.ok) throw new Error(await res.text());
             showMessage('Producto eliminado correctamente!', 'success');
-
-            // Si la página queda vacía y no es la primera, retrocede una página
             await loadProducts(currentPage, true);
           }catch(err){
             console.error(err);
@@ -252,7 +349,7 @@
 
       async function loadProducts(page=0, keepPage=false){
         productsEl.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:24px">Cargando productos…</div>';
-        meta.textContent = ''; // Asegura que no se muestre “palito” cuando no hay datos
+        meta.textContent = '';
         try{
           const res = await authFetch(`${API}/products/get?page=${page}&size=${pageSize}`);
           if(!res.ok) throw new Error('Error API');
@@ -265,7 +362,6 @@
             data.content.forEach(p => productsEl.appendChild(productCard(p)));
           }
 
-          // Paginación
           currentPage = data.number ?? page;
           totalPages  = data.totalPages ?? 1;
           prevBtn.disabled = data.first;
@@ -274,7 +370,6 @@
           const total = data.totalElements ?? '';
           meta.textContent = `Página ${currentPage + 1} de ${totalPages}${total !== '' ? ` • ${total} producto(s)` : ''}`;
 
-          // Si después de borrar no queda nada en la página, retrocede 1
           if(keepPage && data.content && data.content.length === 0 && currentPage > 0){
             currentPage--;
             await loadProducts(currentPage);
@@ -282,7 +377,7 @@
         }catch(err){
           console.error(err);
           productsEl.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:36px">Error al cargar productos.</div>';
-          meta.textContent = ''; // Oculta meta en error
+          meta.textContent = '';
         }
       }
 

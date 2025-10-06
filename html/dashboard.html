@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Panel de Usuario</title>
+
+  <!-- Requisitos del header (mismos que en el index) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/normalize.css"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+
   <style>
     :root{
       --bg:#fff0f5;
@@ -127,72 +136,168 @@
 </head>
 <body>
 
-<div class="user-grid">
+  <!-- ===== HEADER (idéntico al index) ===== -->
+  <header>
+    <div class="hero">
+      <nav id="navbar" class="navegacion-principal contenedor">
+        <ul class="menu">
+          <li><a href="index.html">Inicio</a></li>
 
-  <!-- Sidebar -->
-  <aside class="user-sidebar">
-    <div>
-      <h2>Mi Cuenta</h2>
-      <ul>
-        <li><a href="index.html" class="back-btn">← Volver</a></li>
-        <li><a href="editar-direccion.html">Editar Dirección</a></li>
-        <li><a href="actualizarUsuario.html">Editar Datos de Login</a></li>
-        <li><a href="perfil.html">Modificar Datos de Perfil</a></li>
-      </ul>
+          <li class="submenu">
+            <a href="getProducts.html">Productos <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <!-- Categorías principales -->
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=anillo">Anillos <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=anillo&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=anillo&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=pulsera">Pulseras <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=pulsera&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=pulsera&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <li class="submenu-has-children">
+                <a href="getProducts.html?q=collar">Collares <i class="fa-solid fa-chevron-right"></i></a>
+                <ul class="subsubmenu-items">
+                  <li><a href="getProducts.html?q=collar&material=plata925">Plata 925</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-quirurgico">Acero quirúrgico</a></li>
+                  <li><a href="getProducts.html?q=collar&material=acero-blanco">Acero blanco</a></li>
+                  <li><a href="getProducts.html?q=collar&material=adero-dorado">Adero dorado</a></li>
+                </ul>
+              </li>
+
+              <!-- Otras secciones -->
+              <li><a href="getProducts.html?q=relojes">Relojes</a></li>
+              <li><a href="getProducts.html?q=carteras">Carteras</a></li>
+            </ul>
+          </li>
+
+          <li><a href="contacto.html">Contacto</a></li>
+
+          <li class="submenu">
+            <a href="#">Cuenta <i class="fa-solid fa-caret-down"></i></a>
+            <ul class="submenu-items">
+              <li><a href="login.html">Iniciar sesión</a></li>
+              <li><a href="register.html">Registrarme</a></li>
+              <li><a href="admin.html">Panel de control ADMIN</a></li>
+              <li><a href="dashboard.html">Mi perfil</a></li>
+              <li><a href="logout.php">Cerrar sesión</a></li>
+            </ul>
+          </li>
+
+          <li class="carrito">
+            <a href="carrito.html" aria-label="Carrito">
+              <img src="../imagenes/carrito2.png" alt="Carrito" width="32" height="32" />
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
-    <button class="logout-btn">Cerrar Sesión</button>
-  </aside>
+  </header>
+  <!-- ===== /HEADER ===== -->
 
-  <!-- Contenido principal -->
-  <main class="user-main">
-    <h1>✨ Panel de Usuario ✨</h1>
+  <div class="user-grid">
 
-    <!-- Nombre de usuario con icono -->
-    <div class="user-info">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <defs>
-          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:#f472b6;stop-opacity:1"/>
-          </linearGradient>
-        </defs>
-        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2V19.2c0-3.2-6.4-4.8-9.6-4.8z"/>
-      </svg>
-      <span id="username">Usuario</span>
-    </div>
+    <!-- Sidebar -->
+    <aside class="user-sidebar">
+      <div>
+        <h2>Mi Cuenta</h2>
+        <ul>
+          <li><a href="index.html" class="back-btn">← Volver</a></li>
+          <li><a href="editar-direccion.html">Editar Dirección</a></li>
+          <li><a href="actualizarUsuario.html">Editar Datos de Login</a></li>
+          <li><a href="perfil.html">Modificar Datos de Perfil</a></li>
+        </ul>
+      </div>
+      <button class="logout-btn">Cerrar Sesión</button>
+    </aside>
 
-    <p class="welcome-msg">
-      Bienvenido a tu panel de usuario. <br>
-      Aquí puedes gestionar tu <strong>perfil</strong>, tu <strong>dirección</strong> y tus <strong>datos de inicio de sesión</strong>.
-    </p>
-    <div class="divider" aria-hidden="true"></div>
-  </main>
+    <!-- Contenido principal -->
+    <main class="user-main">
+      <h1>✨ Panel de Usuario ✨</h1>
 
-</div>
+      <!-- Nombre de usuario con icono -->
+      <div class="user-info">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1"/>
+              <stop offset="100%" style="stop-color:#f472b6;stop-opacity:1"/>
+            </linearGradient>
+          </defs>
+          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2V19.2c0-3.2-6.4-4.8-9.6-4.8z"/>
+        </svg>
+        <span id="username">Usuario</span>
+      </div>
 
-<script>
-  // Decodificar el token para obtener username
-  function parseJwt (token) {
-    try {
-      return JSON.parse(atob(token.split('.')[1]));
-    } catch (e) {
-      return null;
+      <p class="welcome-msg">
+        Bienvenido a tu panel de usuario. <br>
+        Aquí puedes gestionar tu <strong>perfil</strong>, tu <strong>dirección</strong> y tus <strong>datos de inicio de sesión</strong>.
+      </p>
+      <div class="divider" aria-hidden="true"></div>
+    </main>
+
+  </div>
+
+  <!-- JS menú responsive (igual que en index) -->
+  <script>
+    (function () {
+      const mq = window.matchMedia('(max-width: 900px)');
+      // Nivel 1 (Productos / Cuenta)
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.submenu > a');
+        if (!trigger) return;
+        if (mq.matches) {
+          e.preventDefault();
+          const li = trigger.parentElement;
+          document.querySelectorAll('.submenu.open').forEach(x => { if (x !== li) x.classList.remove('open'); });
+          li.classList.toggle('open');
+        }
+      });
+      // Nivel 2 (sub-submenús)
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.submenu-has-children > a');
+        if (!trigger) return;
+        if (mq.matches) {
+          e.preventDefault();
+          const li = trigger.parentElement;
+          li.classList.toggle('open');
+          const panel = li.querySelector('.subsubmenu-items');
+          if (panel) panel.style.display = (panel.style.display === 'block' ? 'none' : 'block');
+        }
+      });
+    })();
+  </script>
+
+  <!-- Username desde JWT + logout -->
+  <script>
+    function parseJwt (token) {
+      try { return JSON.parse(atob(token.split('.')[1])); } catch { return null; }
     }
-  }
-
-  const token = localStorage.getItem('jwtToken');
-  if (token) {
-    const payload = parseJwt(token);
-    if (payload && payload.sub) {
-      document.getElementById('username').textContent = payload.sub;
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+      const payload = parseJwt(token);
+      if (payload?.sub) document.getElementById('username').textContent = payload.sub;
     }
-  }
+    document.querySelector('.logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('jwtToken');
+      window.location.href = 'login.html';
+    });
+  </script>
 
-  // Cerrar sesión
-  document.querySelector('.logout-btn').addEventListener('click', () => {
-    localStorage.removeItem('jwtToken');
-    window.location.href = 'login.html';
-  });
-</script>
+  <!-- (Opcional) Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
